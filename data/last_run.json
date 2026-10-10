@@ -1,5 +1,22 @@
 {
-  "openalex": 12577,
-  "eric": 1075,
-  "semantic_scholar": 14581
+  "openalex": {
+    "fetched": 12577,
+    "new": 12563,
+    "duplicate": 14,
+    "error": null
+  },
+  "eric": {
+    "fetched": 1075,
+    "new": 413,
+    "duplicate": 662,
+    "error": null
+  },
+  "semantic_scholar": {
+    "fetched": 14581,
+    "new": 6565,
+    "duplicate": 8016,
+    "error": null
+  },
+  "total_records": 19541,
+  "new_this_run": 19541
 }
