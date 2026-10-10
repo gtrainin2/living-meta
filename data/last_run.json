@@ -1,22 +1,10 @@
 {
-  "openalex": {
-    "fetched": 12577,
-    "new": 12563,
-    "duplicate": 14,
-    "error": null
-  },
-  "eric": {
-    "fetched": 1075,
-    "new": 413,
-    "duplicate": 662,
-    "error": null
-  },
-  "semantic_scholar": {
-    "fetched": 14581,
-    "new": 6565,
-    "duplicate": 8016,
-    "error": null
-  },
-  "total_records": 19541,
-  "new_this_run": 19541
+  "records_before": 19541,
+  "merged": 8,
+  "different_doi_groups": 219,
+  "records_after": 19533,
+  "versions": {
+    "superseded": 126,
+    "flagged_for_review": 182
+  }
 }
