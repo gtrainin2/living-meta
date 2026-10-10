@@ -1,32 +1,32 @@
 {
   "openalex": {
-    "fetched": 9396,
-    "new": 9383,
+    "fetched": 9462,
+    "new": 9449,
     "duplicate": 13,
     "error": null
   },
   "eric": {
-    "fetched": 930,
-    "new": 411,
-    "duplicate": 519,
+    "fetched": 936,
+    "new": 407,
+    "duplicate": 529,
     "error": null
   },
   "semantic_scholar": {
-    "fetched": 10667,
-    "new": 4580,
-    "duplicate": 6087,
+    "fetched": 10735,
+    "new": 4606,
+    "duplicate": 6129,
     "error": null
   },
-  "total_records": 14374,
-  "new_this_run": 14374,
+  "total_records": 14462,
+  "new_this_run": 14462,
   "versions": {
     "superseded": 89,
     "flagged_for_review": 125
   },
   "rules": {
-    "preprint or repository deposit, no published venue": 1019,
+    "preprint or repository deposit, no published venue": 1023,
     "preprint server record with no DOI": 4,
     "dissertation or thesis": 10,
-    "remaining_to_screen": 13252
+    "remaining_to_screen": 13336
   }
 }
