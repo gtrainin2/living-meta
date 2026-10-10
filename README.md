@@ -23,7 +23,11 @@ Optional environment variables: `CONTACT_EMAIL`, `OPENALEX_API_KEY`, `S2_API_KEY
 
 Records with the same title and first author but different DOIs are treated as versions of one study. A journal article outranks a conference paper, which outranks a preprint or repository copy. When one record clearly outranks the rest it is kept, and the others get `status = superseded` and a `linked_to` pointing at it. Nothing is deleted. Groups with no clear winner (two journal versions, for example) keep `status = found` and get a `link_note` asking for review.
 
-To start a run by hand, put one word in `run-request.txt` (`counts`, `baseline`, `weekly`, or `dedup`) and commit it.
+## Exclusions made by rule
+
+Records are excluded without screening only on strong evidence of an ineligible publication type: a preprint-server or data-repository DOI with no published venue, a preprint-server record with no DOI, or a dissertation. They get `status = excluded`, `exclusion_code = E10`, and `decided_by = rule:publication_type`. A preprint DOI attached to a named journal or conference, and a repository copy with a publisher DOI or no DOI, are left for screening.
+
+To start a run by hand, put one word in `run-request.txt` (`counts`, `baseline`, `weekly`, `dedup`, or `rules`) and commit it.
 
 ## Where it differs from the protocol text
 

@@ -146,3 +146,32 @@ def test_link_versions_and_text_roundtrip(tmp_path):
     con2 = db.connect(path)
     assert con2.execute("SELECT COUNT(*) FROM records").fetchone()[0] == 5
     assert con2.execute("SELECT status FROM records WHERE doi='10.1145/1'").fetchone()[0] == "superseded"
+
+
+def test_publication_type_rule():
+    rule = search.publication_type_rule
+    assert rule("10.48550/arxiv.2412.03205", "arXiv.org", "JournalArticle")
+    assert rule("10.5281/zenodo.1", "Zenodo (CERN European Organization for Nuclear Research)", "repository")
+    assert rule("10.5281/zenodo.2", "Neliti", "repository")
+    assert rule(None, "arXiv.org", "JournalArticle")
+    assert rule(None, "ProQuest LLC", "Dissertations/Theses - Doctoral Dissertations")
+    # Kept for screening: weak or conflicting evidence.
+    assert rule("10.48550/arxiv.2506.09367", "Workshop on Innovative Use of NLP", "JournalArticle") is None
+    assert rule("10.1145/3795867.3830978", "arXiv.org", "JournalArticle") is None
+    assert rule("10.2478/rem-2025-0012", "DOAJ (DOAJ: Directory of Open Access Journals)", "repository") is None
+    assert rule(None, "UKnowledge (University of Kentucky)", "repository") is None
+    assert rule("10.1108/dlp-05-2025-206", "Digital Library Perspectives", "journal") is None
+    assert rule("10.24042/biosfer.v14i2.17111", "Biosfer Jurnal Tadris Biologi", "journal") is None
+
+
+def test_apply_rules_only_touches_found(tmp_path):
+    con = db.connect(tmp_path / "r.sqlite")
+    db.upsert(con, _rec(1, "10.48550/arxiv.1", "arXiv.org", "repository", "A preprint only study of chatbots in physics"), 1)
+    db.upsert(con, _rec(2, "10.48550/arxiv.2", "arXiv.org", "repository", "A second preprint that was already screened"), 1)
+    db.upsert(con, _rec(3, "10.1016/1", "Computers and Education", "journal", "A journal article about chatbots in algebra"), 1)
+    con.execute("UPDATE records SET status='screened' WHERE doi='10.48550/arxiv.2'")
+    out = search.apply_rules(con)
+    assert out["remaining_to_screen"] == 1 and sum(v for k, v in out.items() if k != "remaining_to_screen") == 1
+    got = {r["doi"]: (r["status"], r["exclusion_code"]) for r in con.execute("SELECT * FROM records")}
+    assert got == {"10.48550/arxiv.1": ("excluded", "E10"), "10.48550/arxiv.2": ("screened", None),
+                   "10.1016/1": ("found", None)}

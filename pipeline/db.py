@@ -34,7 +34,7 @@ def now():
 
 
 RECORD_COLS = ["record_id", "doi", "title_key", "title", "abstract", "authors", "year", "pub_date", "venue",
-               "pub_type", "url", "sources", "status", "first_run", "first_seen", "linked_to", "link_note"]
+               "pub_type", "url", "sources", "status", "first_run", "first_seen", "linked_to", "link_note", "exclusion_code", "decided_by"]
 RUN_COLS = ["run_id", "started", "mode", "since", "summary"]
 
 
@@ -45,7 +45,8 @@ def connect(path):
     con.row_factory = sqlite3.Row
     con.executescript(SCHEMA)
     have = {r["name"] for r in con.execute("PRAGMA table_info(records)")}
-    for col, kind in (("linked_to", "INTEGER"), ("link_note", "TEXT")):
+    for col, kind in (("linked_to", "INTEGER"), ("link_note", "TEXT"), ("exclusion_code", "TEXT"),
+                      ("decided_by", "TEXT")):
         if col not in have:
             con.execute(f"ALTER TABLE records ADD COLUMN {col} {kind}")
     if con.execute("SELECT COUNT(*) FROM records").fetchone()[0] == 0:

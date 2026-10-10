@@ -217,6 +217,7 @@ def run(mode, cfg, db_path, get=http_get, today=None):
     summary["total_records"] = con.execute("SELECT COUNT(*) FROM records").fetchone()[0]
     summary["new_this_run"] = con.execute("SELECT COUNT(*) FROM records WHERE first_run=?", (run_id,)).fetchone()[0]
     summary["versions"] = link_versions(con)
+    summary["rules"] = apply_rules(con)
     db.finish_run(con, run_id, summary)
     db.save(con, db_path)
     export_csv(con, Path(db_path).with_suffix(".csv"))
@@ -226,7 +227,7 @@ def run(mode, cfg, db_path, get=http_get, today=None):
 def export_csv(con, path):
     """Plain-text copy of the records table so each week's changes show up in the git history."""
     import csv
-    cols = ["record_id", "status", "linked_to", "link_note", "doi", "title", "authors", "year", "venue",
+    cols = ["record_id", "status", "exclusion_code", "decided_by", "linked_to", "link_note", "doi", "title", "authors", "year", "venue",
             "pub_type", "url", "sources", "first_run", "first_seen"]
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
@@ -274,9 +275,12 @@ def dedup(db_path):
             "records_after": after, "versions": versions}
 
 
-PREPRINT_DOI = ("10.48550/", "10.1101/", "10.5281/", "10.31234/", "10.35542/", "10.31219/", "10.2139/",
-                "10.21203/", "10.20944/", "10.36227/", "10.26434/", "10.32388/", "10.3929/", "10.25968/")
-PREPRINT_VENUE = re.compile(r"arxiv|rxiv|zenodo|ssrn|preprint|research square|repository|digital library|osf", re.I)
+# DOI prefixes that belong to preprint servers and data repositories, not to publishers.
+PREPRINT_DOI = ("10.48550/", "10.1101/", "10.64898/", "10.5281/", "10.31234/", "10.35542/", "10.31219/",
+                "10.2139/", "10.21203/", "10.20944/", "10.36227/", "10.26434/", "10.32388/", "10.3929/",
+                "10.25968/", "10.6084/", "10.17605/")
+PREPRINT_VENUE = re.compile(r"arxiv|[a-z]rxiv\b|zenodo|\bssrn\b|preprint|research square|figshare|"
+                            r"\bosf\b|open science framework|social science research network", re.I)
 PROCEEDINGS = re.compile(r"conference|proceedings|symposium|workshop|meeting papers|congress", re.I)
 
 
@@ -290,6 +294,39 @@ def version_rank(doi, venue, pub_type):
     if "ournal" in pub_type or pub_type == "article":
         return 3
     return 0
+
+
+def publication_type_rule(doi, venue, pub_type):
+    """Reason a record is ineligible on publication type alone, or None.
+
+    This rule runs with no human or agent check, so it only fires on strong evidence. A preprint
+    DOI attached to a named journal or conference is left for screening, because the indexes often
+    attach an arXiv DOI to a paper that was later published. So is a repository copy with a
+    publisher DOI or no DOI, because many of those are published articles held in a repository.
+    """
+    doi, venue, pub_type = doi or "", venue or "", pub_type or ""
+    server_venue = bool(PREPRINT_VENUE.search(venue))
+    if doi.startswith(PREPRINT_DOI) and (server_venue or not venue or pub_type == "repository"):
+        return "preprint or repository deposit, no published venue"
+    if server_venue and not doi:
+        return "preprint server record with no DOI"
+    if "Dissertations/Theses" in pub_type:
+        return "dissertation or thesis"
+    return None
+
+
+def apply_rules(con):
+    """Exclude records still at 'found' that fail the publication-type rule. Nothing is deleted."""
+    out = {}
+    for r in con.execute("SELECT record_id, doi, venue, pub_type FROM records WHERE status='found'").fetchall():
+        reason = publication_type_rule(r["doi"], r["venue"], r["pub_type"])
+        if reason:
+            con.execute("UPDATE records SET status='excluded', exclusion_code='E10', decided_by=?, link_note=? "
+                        "WHERE record_id=?", ("rule:publication_type", reason, r["record_id"]))
+            out[reason] = out.get(reason, 0) + 1
+    con.commit()
+    out["remaining_to_screen"] = con.execute("SELECT COUNT(*) FROM records WHERE status='found'").fetchone()[0]
+    return out
 
 
 def link_versions(con):
@@ -340,7 +377,7 @@ def counts(cfg, get=http_get):
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["counts", "baseline", "weekly", "dedup", "urls"])
+    ap.add_argument("mode", choices=["counts", "baseline", "weekly", "dedup", "rules", "urls"])
     ap.add_argument("--db", default=str(ROOT / "data" / "records.sqlite"))
     args = ap.parse_args(argv)
     cfg = load_config()
@@ -352,6 +389,13 @@ def main(argv=None):
         return 0
     if args.mode == "dedup":
         print(json.dumps(dedup(args.db), indent=2))
+        return 0
+    if args.mode == "rules":
+        con = db.connect(args.db)
+        result = apply_rules(con)
+        db.save(con, args.db)
+        export_csv(con, Path(args.db).with_suffix(".csv"))
+        print(json.dumps(result, indent=2))
         return 0
     result = counts(cfg) if args.mode == "counts" else run(args.mode, cfg, args.db)
     print(json.dumps(result, indent=2))
