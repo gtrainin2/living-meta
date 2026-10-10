@@ -101,6 +101,48 @@ def test_dedup_merges_old_keys(tmp_path):
         assert db.upsert(con, r, 1) == "new"
     con.commit()
     out = search.dedup(path)
-    assert out == {"records_before": 3, "merged": 1, "skipped_conflicts": 1, "records_after": 2}
+    assert out["merged"] == 1 and out["records_after"] == 2 and out["different_doi_groups"] == 1
+    assert out["versions"] == {"superseded": 0, "flagged_for_review": 2}      # no type information, so review
     row = db.connect(path).execute("SELECT * FROM records WHERE doi='10.1/a'").fetchone()
     assert row["abstract"] == "from eric" and "eric" in row["sources"] and "openalex" in row["sources"]
+
+
+def test_version_rank():
+    assert search.version_rank("10.48550/arxiv.2511.05476", "Journal of Systems and Software", "JournalArticle") == 1
+    assert search.version_rank("10.5281/zenodo.1", "Zenodo (CERN)", "repository") == 1
+    assert search.version_rank("10.1145/3736181.3747157", "Conference on Global Computing Education", "Book; JournalArticle") == 2
+    assert search.version_rank("10.1/x", "SIGCSE", "JournalArticle; Conference") == 2
+    assert search.version_rank("10.3389/frai.2025.1", "Frontiers in Artificial Intelligence", "journal") == 3
+    assert search.version_rank(None, None, None) == 0
+
+
+def _rec(i, doi, venue, pub_type, title="ChatGPT as a physics tutor: a randomized trial"):
+    return {"source": "s", "source_id": str(i), "title": title, "authors": ["Ana Muller"], "doi": doi,
+            "abstract": None, "year": 2025, "pub_date": None, "venue": venue, "pub_type": pub_type, "url": None,
+            "title_key": search.title_key(title, "Ana Muller", 2025)}
+
+
+def test_link_versions_and_text_roundtrip(tmp_path):
+    path = tmp_path / "r.sqlite"
+    con = db.connect(path)
+    db.upsert(con, _rec(1, "10.48550/arxiv.1", "arXiv.org", "repository"), 1)
+    db.upsert(con, _rec(2, "10.1145/1", "SIGCSE Technical Symposium", "Conference"), 1)
+    db.upsert(con, _rec(3, "10.1016/1", "Computers and Education", "journal"), 1)
+    t2 = "A second study reported in two different journals"
+    db.upsert(con, _rec(4, "10.2/a", "Journal A", "journal", t2), 1)
+    db.upsert(con, _rec(5, "10.2/b", "Journal B", "journal", t2), 1)
+    assert search.link_versions(con) == {"superseded": 2, "flagged_for_review": 2}
+    rows = {r["doi"]: r for r in con.execute("SELECT * FROM records")}
+    keep = rows["10.1016/1"]
+    assert keep["status"] == "found" and keep["linked_to"] is None
+    assert rows["10.48550/arxiv.1"]["status"] == rows["10.1145/1"]["status"] == "superseded"
+    assert rows["10.1145/1"]["linked_to"] == keep["record_id"]
+    assert rows["10.2/a"]["status"] == "found" and "needs review" in rows["10.2/a"]["link_note"]
+    assert search.link_versions(con) == {"superseded": 0, "flagged_for_review": 0}      # safe to rerun
+    # The text files alone must rebuild the same database.
+    db.save(con, path)
+    con.close()
+    path.unlink()
+    con2 = db.connect(path)
+    assert con2.execute("SELECT COUNT(*) FROM records").fetchone()[0] == 5
+    assert con2.execute("SELECT status FROM records WHERE doi='10.1145/1'").fetchone()[0] == "superseded"

@@ -216,7 +216,9 @@ def run(mode, cfg, db_path, get=http_get, today=None):
         summary[name] = s
     summary["total_records"] = con.execute("SELECT COUNT(*) FROM records").fetchone()[0]
     summary["new_this_run"] = con.execute("SELECT COUNT(*) FROM records WHERE first_run=?", (run_id,)).fetchone()[0]
+    summary["versions"] = link_versions(con)
     db.finish_run(con, run_id, summary)
+    db.save(con, db_path)
     export_csv(con, Path(db_path).with_suffix(".csv"))
     return summary
 
@@ -224,8 +226,8 @@ def run(mode, cfg, db_path, get=http_get, today=None):
 def export_csv(con, path):
     """Plain-text copy of the records table so each week's changes show up in the git history."""
     import csv
-    cols = ["record_id", "status", "doi", "title", "authors", "year", "venue", "pub_type", "url", "sources",
-            "first_run", "first_seen"]
+    cols = ["record_id", "status", "linked_to", "link_note", "doi", "title", "authors", "year", "venue",
+            "pub_type", "url", "sources", "first_run", "first_seen"]
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(cols)
@@ -264,9 +266,63 @@ def dedup(db_path):
                                               keep["pub_date"], keep["url"], keep["pub_type"], keep["record_id"]))
             merged += 1
     con.commit()
+    versions = link_versions(con)
+    db.save(con, db_path)
     export_csv(con, Path(db_path).with_suffix(".csv"))
     after = con.execute("SELECT COUNT(*) FROM records").fetchone()[0]
-    return {"records_before": before, "merged": merged, "skipped_conflicts": skipped, "records_after": after}
+    return {"records_before": before, "merged": merged, "different_doi_groups": skipped,
+            "records_after": after, "versions": versions}
+
+
+PREPRINT_DOI = ("10.48550/", "10.1101/", "10.5281/", "10.31234/", "10.35542/", "10.31219/", "10.2139/",
+                "10.21203/", "10.20944/", "10.36227/", "10.26434/", "10.32388/", "10.3929/", "10.25968/")
+PREPRINT_VENUE = re.compile(r"arxiv|rxiv|zenodo|ssrn|preprint|research square|repository|digital library|osf", re.I)
+PROCEEDINGS = re.compile(r"conference|proceedings|symposium|workshop|meeting papers|congress", re.I)
+
+
+def version_rank(doi, venue, pub_type):
+    """3 journal article, 2 conference paper, 1 preprint or repository copy, 0 cannot tell."""
+    doi, venue, pub_type = doi or "", venue or "", pub_type or ""
+    if doi.startswith(PREPRINT_DOI) or doi.endswith("/pdf") or pub_type == "repository" or PREPRINT_VENUE.search(venue):
+        return 1
+    if PROCEEDINGS.search(pub_type) or PROCEEDINGS.search(venue):
+        return 2
+    if "ournal" in pub_type or pub_type == "article":
+        return 3
+    return 0
+
+
+def link_versions(con):
+    """Handle records with the same title and first author but different DOIs.
+
+    When one record clearly outranks the rest (journal over conference paper over preprint), it is
+    kept and the others are marked 'superseded' with a link to it. Nothing is deleted. Groups with
+    no clear winner stay in play and are flagged for a person to review.
+    """
+    out = {"superseded": 0, "flagged_for_review": 0}
+    keys = con.execute("SELECT title_key FROM records WHERE title_key IS NOT NULL AND status != 'superseded' "
+                       "GROUP BY title_key HAVING COUNT(*) > 1").fetchall()
+    for (key,) in keys:
+        rows = con.execute("SELECT * FROM records WHERE title_key=? AND status != 'superseded' "
+                           "ORDER BY record_id", (key,)).fetchall()
+        ranks = [version_rank(r["doi"], r["venue"], r["pub_type"]) for r in rows]
+        top = max(ranks)
+        if ranks.count(top) == 1 and 0 not in ranks:
+            keep = rows[ranks.index(top)]
+            for r, rank in zip(rows, ranks):
+                if r["record_id"] != keep["record_id"] and r["status"] == "found":
+                    con.execute("UPDATE records SET status='superseded', linked_to=?, link_note=? WHERE record_id=?",
+                                (keep["record_id"], "earlier version of the linked record", r["record_id"]))
+                    out["superseded"] += 1
+        else:
+            for r in rows:
+                other = rows[0]["record_id"] if r["record_id"] != rows[0]["record_id"] else rows[1]["record_id"]
+                if not r["link_note"]:
+                    con.execute("UPDATE records SET linked_to=?, link_note=? WHERE record_id=?",
+                                (other, "possible version of the linked record, needs review", r["record_id"]))
+                    out["flagged_for_review"] += 1
+    con.commit()
+    return out
 
 
 def counts(cfg, get=http_get):
