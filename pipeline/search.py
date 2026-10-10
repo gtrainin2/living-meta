@@ -1,0 +1,261 @@
+"""Stage 1, search. Plain code, no agent.
+
+    python -m pipeline.search counts              # hit counts per source, no download
+    python -m pipeline.search baseline            # everything since start_date
+    python -m pipeline.search weekly              # recent window, deduplicated against the database
+
+Environment: CONTACT_EMAIL (sent to OpenAlex), OPENALEX_API_KEY and S2_API_KEY (optional).
+"""
+import argparse
+import json
+import os
+import re
+import sys
+import time
+import unicodedata
+from datetime import date, timedelta
+from pathlib import Path
+
+import yaml
+
+from . import db
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+# ---------- normalization ----------
+
+def norm_doi(doi):
+    if not doi:
+        return None
+    doi = doi.strip().lower()
+    doi = re.sub(r"^(https?://(dx\.)?doi\.org/|doi:)", "", doi)
+    return doi if doi.startswith("10.") else None
+
+
+def title_key(title, first_author, year):
+    """Fallback identity when a DOI is missing: normalized title + first author surname."""
+    if not title:
+        return None
+    t = unicodedata.normalize("NFKD", title).encode("ascii", "ignore").decode().lower()
+    t = re.sub(r"[^a-z0-9]+", " ", t).strip()
+    if len(t) < 15:                      # too short to be a safe key
+        return None
+    a = unicodedata.normalize("NFKD", first_author or "").encode("ascii", "ignore").decode().lower()
+    a = re.sub(r"[^a-z ]", "", a).split()
+    return f"{t}|{a[-1] if a else ''}"
+
+
+def record(source, source_id, title, abstract, authors, year, pub_date, venue, pub_type, doi, url):
+    authors = [a for a in (authors or []) if a]
+    return {
+        "source": source, "source_id": str(source_id), "title": (title or "").strip(),
+        "abstract": (abstract or "").strip() or None, "authors": authors,
+        "year": int(year) if year else None, "pub_date": pub_date, "venue": venue or None,
+        "pub_type": pub_type or None, "doi": norm_doi(doi), "url": url or None,
+        "title_key": title_key(title, authors[0] if authors else "", year),
+    }
+
+
+def q(term):
+    return f'"{term}"' if re.search(r"[\s\-.]", term) else term
+
+
+# ---------- sources ----------
+# Each source exposes build(cfg, since) -> (url, params), count(json) -> int,
+# and pages(get, cfg, since) -> iterator of normalized records.
+
+class OpenAlex:
+    name = "openalex"
+    url = "https://api.openalex.org/works"
+
+    def build(self, cfg, since):
+        blocks = " AND ".join("(" + " OR ".join(q(t) for t in terms) + ")" for terms in cfg["blocks"].values())
+        params = {"filter": f"title_and_abstract.search:{blocks},from_publication_date:{since},type:article",
+                  "per-page": 200}
+        if os.environ.get("CONTACT_EMAIL"):
+            params["mailto"] = os.environ["CONTACT_EMAIL"]
+        if os.environ.get("OPENALEX_API_KEY"):
+            params["api_key"] = os.environ["OPENALEX_API_KEY"]
+        return self.url, params
+
+    def count(self, js):
+        return js["meta"]["count"]
+
+    @staticmethod
+    def abstract(inv):
+        if not inv:
+            return None
+        pos = sorted((p, w) for w, ps in inv.items() for p in ps)
+        return " ".join(w for _, w in pos)
+
+    def pages(self, get, cfg, since):
+        url, params = self.build(cfg, since)
+        cursor = "*"
+        while cursor:
+            js = get(url, {**params, "cursor": cursor})
+            for w in js.get("results", []):
+                src = ((w.get("primary_location") or {}).get("source") or {})
+                yield record(self.name, w["id"], w.get("title"), self.abstract(w.get("abstract_inverted_index")),
+                             [(a.get("author") or {}).get("display_name") for a in w.get("authorships", [])],
+                             w.get("publication_year"), w.get("publication_date"), src.get("display_name"),
+                             src.get("type") or w.get("type"), w.get("doi"), w.get("id"))
+            cursor = js.get("meta", {}).get("next_cursor") if js.get("results") else None
+
+
+class Eric:
+    name = "eric"
+    url = "https://api.ies.ed.gov/eric/"
+    fields = "id,title,author,description,publicationdateyear,source,url,peerreviewed,publicationtype"
+
+    def build(self, cfg, since):
+        blocks = " AND ".join("(" + " OR ".join(q(t) for t in terms) + ")" for terms in cfg["blocks"].values())
+        years = " OR ".join(f"publicationdateyear:{y}" for y in range(int(since[:4]), date.today().year + 1))
+        return self.url, {"search": f"{blocks} AND ({years})", "format": "json", "rows": 200, "fields": self.fields}
+
+    def count(self, js):
+        return js["response"]["numFound"]
+
+    def pages(self, get, cfg, since):
+        url, params = self.build(cfg, since)
+        start = 0
+        while True:
+            js = get(url, {**params, "start": start})
+            docs = js["response"]["docs"]
+            for d in docs:
+                link = d.get("url") or ""
+                yield record(self.name, d["id"], d.get("title"), d.get("description"), d.get("author"),
+                             d.get("publicationdateyear"), None, d.get("source"),
+                             "; ".join(d.get("publicationtype") or []), link if "doi.org" in link else None,
+                             f"https://eric.ed.gov/?id={d['id']}")
+            start += len(docs)
+            if not docs or start >= js["response"]["numFound"]:
+                break
+
+
+class SemanticScholar:
+    name = "semantic_scholar"
+    url = "https://api.semanticscholar.org/graph/v1/paper/search/bulk"
+    fields = "title,abstract,year,venue,externalIds,publicationTypes,publicationDate,authors"
+
+    def build(self, cfg, since):
+        blocks = " + ".join("(" + " | ".join(q(t) for t in terms) + ")" for terms in cfg["blocks"].values())
+        return self.url, {"query": blocks, "fields": self.fields, "publicationDateOrYear": f"{since}:"}
+
+    def count(self, js):
+        return js["total"]
+
+    def pages(self, get, cfg, since):
+        url, params = self.build(cfg, since)
+        token = None
+        while True:
+            js = get(url, {**params, **({"token": token} if token else {})})
+            for p in js.get("data", []):
+                ext = p.get("externalIds") or {}
+                yield record(self.name, p["paperId"], p.get("title"), p.get("abstract"),
+                             [a.get("name") for a in p.get("authors") or []], p.get("year"),
+                             p.get("publicationDate"), p.get("venue"),
+                             "; ".join(p.get("publicationTypes") or []), ext.get("DOI"),
+                             f"https://www.semanticscholar.org/paper/{p['paperId']}")
+            token = js.get("token")
+            if not token or not js.get("data"):
+                break
+
+
+SOURCES = {s.name: s for s in (OpenAlex(), Eric(), SemanticScholar())}
+
+
+# ---------- http ----------
+
+def http_get(url, params, tries=5):
+    import requests
+    headers = {"User-Agent": f"living-meta-analysis ({os.environ.get('CONTACT_EMAIL', 'no-contact')})"}
+    if "semanticscholar" in url and os.environ.get("S2_API_KEY"):
+        headers["x-api-key"] = os.environ["S2_API_KEY"]
+    for i in range(tries):
+        r = requests.get(url, params=params, headers=headers, timeout=60)
+        if r.status_code in (429, 500, 502, 503, 504):
+            time.sleep(min(60, 2 ** i * 3))
+            continue
+        r.raise_for_status()
+        time.sleep(1.1 if "semanticscholar" in url else 0.15)
+        return r.json()
+    raise RuntimeError(f"{url} kept failing after {tries} tries (last status {r.status_code})")
+
+
+# ---------- run ----------
+
+def load_config(path=None):
+    return yaml.safe_load(Path(path or ROOT / "config" / "search.yaml").read_text())
+
+
+def run(mode, cfg, db_path, get=http_get, today=None):
+    today = today or date.today()
+    since = cfg["start_date"] if mode == "baseline" else str(today - timedelta(days=cfg["weekly_lookback_days"]))
+    con = db.connect(db_path)
+    run_id = db.start_run(con, mode, since)
+    summary = {}
+    for name in cfg["sources"]:
+        s = {"fetched": 0, "new": 0, "duplicate": 0, "error": None}
+        try:
+            for rec in SOURCES[name].pages(get, cfg, since):
+                if not rec["title"]:
+                    continue
+                s["fetched"] += 1
+                s[db.upsert(con, rec, run_id)] += 1
+            con.commit()
+        except Exception as e:           # one source failing must not lose the others
+            con.commit()
+            s["error"] = f"{type(e).__name__}: {e}"
+        summary[name] = s
+    summary["total_records"] = con.execute("SELECT COUNT(*) FROM records").fetchone()[0]
+    summary["new_this_run"] = con.execute("SELECT COUNT(*) FROM records WHERE first_run=?", (run_id,)).fetchone()[0]
+    db.finish_run(con, run_id, summary)
+    export_csv(con, Path(db_path).with_suffix(".csv"))
+    return summary
+
+
+def export_csv(con, path):
+    """Plain-text copy of the records table so each week's changes show up in the git history."""
+    import csv
+    cols = ["record_id", "status", "doi", "title", "authors", "year", "venue", "pub_type", "url", "sources",
+            "first_run", "first_seen"]
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(cols)
+        w.writerows(con.execute(f"SELECT {','.join(cols)} FROM records ORDER BY record_id"))
+
+
+def counts(cfg, get=http_get):
+    out = {}
+    for name in cfg["sources"]:
+        src = SOURCES[name]
+        url, params = src.build(cfg, cfg["start_date"])
+        small = {**params, **{k: 1 for k in ("per-page", "rows") if k in params}}
+        try:
+            out[name] = src.count(get(url, small))
+        except Exception as e:
+            out[name] = f"error: {e}"
+    return out
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser()
+    ap.add_argument("mode", choices=["counts", "baseline", "weekly", "urls"])
+    ap.add_argument("--db", default=str(ROOT / "data" / "records.sqlite"))
+    args = ap.parse_args(argv)
+    cfg = load_config()
+    if args.mode == "urls":              # print the count queries, for checking by hand
+        from urllib.parse import urlencode
+        for name in cfg["sources"]:
+            url, params = SOURCES[name].build(cfg, cfg["start_date"])
+            print(name, url + "?" + urlencode(params))
+        return 0
+    result = counts(cfg) if args.mode == "counts" else run(args.mode, cfg, args.db)
+    print(json.dumps(result, indent=2))
+    errors = [v for v in result.values() if isinstance(v, dict) and v.get("error")]
+    return 1 if errors else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

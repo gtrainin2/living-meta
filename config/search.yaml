@@ -1,0 +1,63 @@
+# Search configuration. Mirrors Protocol section 3. Agents and scripts read this; only the PI edits it.
+# Terms are spelled out without wildcards because OpenAlex and ERIC do not support them reliably.
+protocol_version: "0.2"
+start_date: "2023-01-01"        # protocol: searches start January 1, 2023
+weekly_lookback_days: 120       # weekly runs re-query this window by publication date; dedup makes it safe
+blocks:
+  generative_ai:
+    - generative AI
+    - generative artificial intelligence
+    - GenAI
+    - large language model
+    - large language models
+    - LLM
+    - LLMs
+    - ChatGPT
+    - GPT-3.5
+    - GPT-4
+    - GPT-4o
+    - Gemini
+    - Claude
+    - Copilot
+    - AI chatbot
+    - AI chatbots
+    - AI tutor
+    - AI tutors
+    - AI assistant
+    - AI assistants
+    - Khanmigo
+  stem:
+    - STEM
+    - science
+    - physics
+    - chemistry
+    - biology
+    - math
+    - mathematics
+    - mathematical
+    - algebra
+    - calculus
+    - statistics
+    - engineering
+    - computer science
+    - programming
+    - coding
+    - computational thinking
+    - data science
+  learners:
+    - student
+    - students
+    - learner
+    - learners
+    - pupil
+    - pupils
+    - undergraduate
+    - undergraduates
+    - K-12
+    - school
+    - schools
+    - classroom
+    - classrooms
+    - course
+    - courses
+sources: [openalex, eric, semantic_scholar]

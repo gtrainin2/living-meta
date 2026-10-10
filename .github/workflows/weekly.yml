@@ -1,0 +1,34 @@
+name: Weekly search
+on:
+  schedule:
+    - cron: "17 11 * * 1"      # Mondays, about 6:17 am Central
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "counts, baseline, or weekly"
+        default: weekly
+permissions:
+  contents: write
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - name: Run search
+        env:
+          CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+          S2_API_KEY: ${{ secrets.S2_API_KEY }}
+        run: python -m pipeline.search ${{ inputs.mode || 'weekly' }} | tee data/last_run.json
+      - name: Commit records
+        if: always()
+        run: |
+          git config user.name "living-meta-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || git commit -m "Search run $(date -u +%F)"
+          git push
