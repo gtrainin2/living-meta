@@ -1,6 +1,32 @@
 {
-  "preprint or repository deposit, no published venue": 1690,
-  "preprint server record with no DOI": 6,
-  "dissertation or thesis": 12,
-  "remaining_to_screen": 17699
+  "openalex": {
+    "fetched": 9396,
+    "new": 9383,
+    "duplicate": 13,
+    "error": null
+  },
+  "eric": {
+    "fetched": 930,
+    "new": 411,
+    "duplicate": 519,
+    "error": null
+  },
+  "semantic_scholar": {
+    "fetched": 10667,
+    "new": 4580,
+    "duplicate": 6087,
+    "error": null
+  },
+  "total_records": 14374,
+  "new_this_run": 14374,
+  "versions": {
+    "superseded": 89,
+    "flagged_for_review": 125
+  },
+  "rules": {
+    "preprint or repository deposit, no published venue": 1019,
+    "preprint server record with no DOI": 4,
+    "dissertation or thesis": 10,
+    "remaining_to_screen": 13252
+  }
 }
