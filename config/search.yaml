@@ -1,6 +1,6 @@
 # Search configuration. Mirrors Protocol section 3. Agents and scripts read this; only the PI edits it.
 # Terms are spelled out without wildcards because OpenAlex and ERIC do not support them reliably.
-protocol_version: "0.3"
+protocol_version: "0.4"
 start_date: "2023-01-01"        # protocol: searches start January 1, 2023
 weekly_lookback_days: 120       # weekly runs re-query this window by publication date; dedup makes it safe
 blocks:
@@ -29,6 +29,11 @@ blocks:
   stem:
     - STEM
     - science education
+    - science learning
+    - science teaching
+    - science classroom
+    - science curriculum
+    - school science
     - physics
     - chemistry
     - biology
