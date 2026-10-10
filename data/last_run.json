@@ -1,10 +1,6 @@
 {
-  "records_before": 19541,
-  "merged": 8,
-  "different_doi_groups": 219,
-  "records_after": 19533,
-  "versions": {
-    "superseded": 126,
-    "flagged_for_review": 182
-  }
+  "preprint or repository deposit, no published venue": 1690,
+  "preprint server record with no DOI": 6,
+  "dissertation or thesis": 12,
+  "remaining_to_screen": 17699
 }
