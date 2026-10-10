@@ -2,6 +2,8 @@ name: Weekly search
 on:
   schedule:
     - cron: "17 11 * * 1"      # Mondays, about 6:17 am Central
+  push:
+    paths: ["run-request.txt"]   # committing a mode to this file starts a run
   workflow_dispatch:
     inputs:
       mode:
@@ -23,7 +25,12 @@ jobs:
           CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           S2_API_KEY: ${{ secrets.S2_API_KEY }}
-        run: python -m pipeline.search ${{ inputs.mode || 'weekly' }} | tee data/last_run.json
+        run: |
+          MODE="${{ inputs.mode }}"
+          if [ -z "$MODE" ] && [ "${{ github.event_name }}" = "push" ]; then MODE="$(head -n1 run-request.txt | tr -d '[:space:]')"; fi
+          case "$MODE" in counts|baseline|weekly) ;; *) MODE=weekly ;; esac
+          echo "mode: $MODE"
+          python -m pipeline.search "$MODE" 2> data/last_run.err | tee data/last_run.json
       - name: Commit records
         if: always()
         run: |
@@ -31,4 +38,4 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add data
           git diff --cached --quiet || git commit -m "Search run $(date -u +%F)"
-          git push
+          git pull --rebase -q && git push
