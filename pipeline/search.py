@@ -41,9 +41,15 @@ def title_key(title, first_author, year):
     t = re.sub(r"[^a-z0-9]+", " ", t).strip()
     if len(t) < 15:                      # too short to be a safe key
         return None
-    a = unicodedata.normalize("NFKD", first_author or "").encode("ascii", "ignore").decode().lower()
-    a = re.sub(r"[^a-z ]", "", a).split()
-    return f"{t}|{a[-1] if a else ''}"
+    return f"{t}|{surname(first_author)}"
+
+
+def surname(name):
+    """Surname from 'Ana Muller' or from ERIC's 'Muller, Ana'. Last word of the surname part."""
+    a = unicodedata.normalize("NFKD", name or "").encode("ascii", "ignore").decode().lower()
+    a = a.split(",")[0] if "," in a else a
+    a = re.sub(r"[^a-z ]", " ", a).split()
+    return a[-1] if a else ""
 
 
 def record(source, source_id, title, abstract, authors, year, pub_date, venue, pub_type, doi, url):
@@ -226,6 +232,43 @@ def export_csv(con, path):
         w.writerows(con.execute(f"SELECT {','.join(cols)} FROM records ORDER BY record_id"))
 
 
+def dedup(db_path):
+    """Recompute every title key with the current rules, then merge records that now match.
+
+    A merge keeps the earliest record, unions the sources, and fills gaps. It is skipped when
+    the DOIs conflict or when a record to be removed has already moved past 'found'.
+    """
+    con = db.connect(db_path)
+    before = con.execute("SELECT COUNT(*) FROM records").fetchone()[0]
+    for r in con.execute("SELECT record_id, title, authors, year FROM records").fetchall():
+        authors = json.loads(r["authors"] or "[]")
+        con.execute("UPDATE records SET title_key=? WHERE record_id=?",
+                    (title_key(r["title"], authors[0] if authors else "", r["year"]), r["record_id"]))
+    merged = skipped = 0
+    keys = con.execute("SELECT title_key FROM records WHERE title_key IS NOT NULL "
+                       "GROUP BY title_key HAVING COUNT(*) > 1").fetchall()
+    for (key,) in keys:
+        rows = con.execute("SELECT * FROM records WHERE title_key=? ORDER BY record_id", (key,)).fetchall()
+        keep = dict(rows[0])
+        for r in rows[1:]:
+            if (keep["doi"] and r["doi"] and keep["doi"] != r["doi"]) or r["status"] != "found":
+                skipped += 1
+                continue
+            sources = {**json.loads(r["sources"]), **json.loads(keep["sources"])}
+            keep["sources"] = json.dumps(sources)
+            for k in ("doi", "abstract", "venue", "pub_date", "url", "pub_type"):
+                keep[k] = keep[k] or r[k]
+            con.execute("DELETE FROM records WHERE record_id=?", (r["record_id"],))
+            con.execute("UPDATE records SET sources=?, doi=?, abstract=?, venue=?, pub_date=?, url=?, pub_type=? "
+                        "WHERE record_id=?", (keep["sources"], keep["doi"], keep["abstract"], keep["venue"],
+                                              keep["pub_date"], keep["url"], keep["pub_type"], keep["record_id"]))
+            merged += 1
+    con.commit()
+    export_csv(con, Path(db_path).with_suffix(".csv"))
+    after = con.execute("SELECT COUNT(*) FROM records").fetchone()[0]
+    return {"records_before": before, "merged": merged, "skipped_conflicts": skipped, "records_after": after}
+
+
 def counts(cfg, get=http_get):
     out = {}
     for name in cfg["sources"]:
@@ -241,7 +284,7 @@ def counts(cfg, get=http_get):
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["counts", "baseline", "weekly", "urls"])
+    ap.add_argument("mode", choices=["counts", "baseline", "weekly", "dedup", "urls"])
     ap.add_argument("--db", default=str(ROOT / "data" / "records.sqlite"))
     args = ap.parse_args(argv)
     cfg = load_config()
@@ -250,6 +293,9 @@ def main(argv=None):
         for name in cfg["sources"]:
             url, params = SOURCES[name].build(cfg, cfg["start_date"])
             print(name, url + "?" + urlencode(params))
+        return 0
+    if args.mode == "dedup":
+        print(json.dumps(dedup(args.db), indent=2))
         return 0
     result = counts(cfg) if args.mode == "counts" else run(args.mode, cfg, args.db)
     print(json.dumps(result, indent=2))

@@ -77,3 +77,30 @@ def test_source_failure_is_isolated(tmp_path):
         return fake_get(url, params)
     s = search.run("baseline", CFG, tmp_path / "r.sqlite", get=flaky)
     assert s["eric"]["error"] and s["total_records"] == 3
+
+
+def test_surname_formats():
+    assert search.surname("Muller, Ana") == search.surname("Ana Müller") == "muller"
+    assert search.surname("van der Berg, Jan") == search.surname("Jan van der Berg") == "berg"
+    t = "ChatGPT as a Physics Tutor: A Randomized Trial"
+    assert search.title_key(t, "Muller, Ana", 2024) == search.title_key(t + ".", "Ana Müller", 2024)
+
+
+def test_dedup_merges_old_keys(tmp_path):
+    path = tmp_path / "r.sqlite"
+    con = db.connect(path)
+    base = dict(abstract=None, year=2024, pub_date=None, venue=None, pub_type=None, url=None)
+    t = "ChatGPT as a physics tutor: a randomized trial"
+    a = {**base, "source": "openalex", "source_id": "W1", "title": t, "authors": ["Ana Müller"],
+         "doi": "10.1/a", "title_key": "old-key-1"}
+    b = {**base, "source": "eric", "source_id": "EJ1", "title": t + ".", "authors": ["Muller, Ana"],
+         "doi": None, "abstract": "from eric", "title_key": "old-key-2"}
+    c = {**base, "source": "eric", "source_id": "EJ2", "title": t, "authors": ["Muller, Ana"],
+         "doi": "10.1/different", "title_key": "old-key-3"}
+    for r in (a, b, c):
+        assert db.upsert(con, r, 1) == "new"
+    con.commit()
+    out = search.dedup(path)
+    assert out == {"records_before": 3, "merged": 1, "skipped_conflicts": 1, "records_after": 2}
+    row = db.connect(path).execute("SELECT * FROM records WHERE doi='10.1/a'").fetchone()
+    assert row["abstract"] == "from eric" and "eric" in row["sources"] and "openalex" in row["sources"]

@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "counts, baseline, or weekly"
+        description: "counts, baseline, weekly, or dedup"
         default: weekly
 permissions:
   contents: write
@@ -28,7 +28,7 @@ jobs:
         run: |
           MODE="${{ inputs.mode }}"
           if [ -z "$MODE" ] && [ "${{ github.event_name }}" = "push" ]; then MODE="$(head -n1 run-request.txt | tr -d '[:space:]')"; fi
-          case "$MODE" in counts|baseline|weekly) ;; *) MODE=weekly ;; esac
+          case "$MODE" in counts|baseline|weekly|dedup) ;; *) MODE=weekly ;; esac
           echo "mode: $MODE"
           python -m pipeline.search "$MODE" 2> data/last_run.err | tee data/last_run.json
       - name: Commit records
