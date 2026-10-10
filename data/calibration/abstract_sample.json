@@ -1,0 +1,1409 @@
+{
+ "seed": 20261009,
+ "drawn_from": 13336,
+ "enriched_pool": 1354,
+ "random_pool": 13236,
+ "note": "random stratum excludes the 100 enriched draws; weight strata by pool size for population estimates",
+ "items": [
+  {
+   "item": 1,
+   "record_id": 4377,
+   "doi": null,
+   "title": "THE IMPACT OF GENERATIVE AI ON LINGUISTIC ACCURACY AND LEXICAL DIVERSITY IN ESL ACADEMIC WRITING",
+   "stratum": "enriched"
+  },
+  {
+   "item": 2,
+   "record_id": 1310,
+   "doi": "10.11591/ijere.v15i5.39079",
+   "title": "Generative artificial intelligence and academic outcomes of Philippine information technology students",
+   "stratum": "random"
+  },
+  {
+   "item": 3,
+   "record_id": 1237,
+   "doi": "10.37899/journallaedusci.v7i6.5931",
+   "title": "Generative AI as Instructional Scaffolding: Effects on Critical Thinking and Classroom Engagement in Secondary Education",
+   "stratum": "enriched"
+  },
+  {
+   "item": 4,
+   "record_id": 7511,
+   "doi": "10.1016/j.nepr.2026.104770",
+   "title": "An innovative Socratic method-based artificial intelligence platform for healthcare education: A quasi-experimental study",
+   "stratum": "random"
+  },
+  {
+   "item": 5,
+   "record_id": 11265,
+   "doi": "10.1145/3657604.3662042",
+   "title": "Supporting Self-Reflection at Scale with Large Language Models: Insights from Randomized Field Experiments in Classrooms",
+   "stratum": "enriched"
+  },
+  {
+   "item": 6,
+   "record_id": 6802,
+   "doi": "10.1108/lfet-04-2025-0040",
+   "title": "The impact of AI tools: ChatGPT, Gamma and Autopilot on performance in academic assignments",
+   "stratum": "enriched"
+  },
+  {
+   "item": 7,
+   "record_id": 6189,
+   "doi": "10.28925/2414-0325.2025.1814",
+   "title": "USING CORPORATE MECHANISMS TO IMPROVE ACADEMIC ENGLISH LANGUAGE PROFICIENCY AMONG POSTGRADUATE STUDENTS: IMPACT ON THE LEARNING PROCESS",
+   "stratum": "enriched"
+  },
+  {
+   "item": 8,
+   "record_id": 8290,
+   "doi": "10.61154/holopraxis.v10i2.4806",
+   "title": "Gamificaci\u00f3n con Inteligencia Artificial en Matem\u00e1tica: Motivaci\u00f3n y Aprendizaje en B\u00e1sica Media.",
+   "stratum": "enriched"
+  },
+  {
+   "item": 9,
+   "record_id": 11183,
+   "doi": "10.62411/jcta.15031",
+   "title": "The Llama\u2013ARCS Adaptive Learning framework: AI\u2013VR Integration System for Real-Time Motivational Feedback in Higher Education",
+   "stratum": "enriched"
+  },
+  {
+   "item": 10,
+   "record_id": 633,
+   "doi": "10.1186/s13049-026-01632-2",
+   "title": "Feasibility and challenges of large language model (LLM)-generated neonatal resuscitation simulations: a multicenter exploratory study",
+   "stratum": "enriched"
+  },
+  {
+   "item": 11,
+   "record_id": 8862,
+   "doi": "10.1093/jvcult/vcaf018",
+   "title": "AI and the Historian: Why Digital Literacy Matters Now More Than Ever",
+   "stratum": "random"
+  },
+  {
+   "item": 12,
+   "record_id": 261,
+   "doi": "10.70012/csse.02.062",
+   "title": "Coding with ChatGPT: Empirical Evidence of Cognitive Offloading in Computer Science Education",
+   "stratum": "enriched"
+  },
+  {
+   "item": 13,
+   "record_id": 3986,
+   "doi": "10.55677/ijhrsss/07-2026-vol03i09",
+   "title": "Do Students Verify What AI Tells Them? A Survey of AI Use and Self-Assessed AI Competence in High School Physics",
+   "stratum": "enriched"
+  },
+  {
+   "item": 14,
+   "record_id": 2102,
+   "doi": "10.1016/j.caeai.2025.100427",
+   "title": "Evaluating the capability of large language models in characterising relational feedback: A comparative analysis of prompting strategies",
+   "stratum": "random"
+  },
+  {
+   "item": 15,
+   "record_id": 13324,
+   "doi": "10.1109/inforino68543.2026.11556588",
+   "title": "Digital Transformation of Engineering Education as a Driver of the Regional Innovation System",
+   "stratum": "random"
+  },
+  {
+   "item": 16,
+   "record_id": 2052,
+   "doi": "10.1155/hbe2/8841208",
+   "title": "Would You Trust Your GenAI Chatbot as Your School Therapist? Perspectives and Implications From Teachers and Students",
+   "stratum": "random"
+  },
+  {
+   "item": 17,
+   "record_id": 6164,
+   "doi": "10.3390/healthcare14131883",
+   "title": "Generative AI\u2013Assisted Simulation Training Is Associated with Higher Post-Intervention Diagnostic Communication Scores Across Type 2 Diabetes, Obesity, and Breast Cancer Scenarios",
+   "stratum": "enriched"
+  },
+  {
+   "item": 18,
+   "record_id": 3649,
+   "doi": "10.17507/tpls.1607.20",
+   "title": "Improving Engineering Students\u2019 English Proficiency Through ChatGPT-Assisted Instruction: A Quasi-Experimental Study",
+   "stratum": "enriched"
+  },
+  {
+   "item": 19,
+   "record_id": 8141,
+   "doi": null,
+   "title": "\u0e01\u0e32\u0e23\u0e1e\u0e12\u0e19\u0e32\u0e01\u0e08\u0e01\u0e23\u0e23\u0e21\u0e01\u0e32\u0e23\u0e40\u0e23\u0e22\u0e19\u0e23\u0e15\u0e32\u0e21\u0e41\u0e19\u0e27\u0e17\u0e32\u0e07\u0e01\u0e32\u0e23\u0e40\u0e25\u0e32\u0e40\u0e23\u0e2d\u0e07\u0e14\u0e08\u0e17\u0e25\u0e14\u0e27\u0e22\u0e1b\u0e0d\u0e0d\u0e32\u0e1b\u0e23\u0e30\u0e14\u0e29\u0e10\u0e41\u0e1a\u0e1a\u0e23\u0e2a\u0e23\u0e32\u0e07\u0e40\u0e1e\u0e2d\u0e2a\u0e07\u0e40\u0e2a\u0e23\u0e21\u0e01\u0e32\u0e23\u0e23\u0e14\u0e08\u0e17\u0e25 \u0e2a\u0e33\u0e2b\u0e23\u0e1a\u0e19\u0e01\u0e40\u0e23\u0e22\u0e19\u0e23\u0e30\u0e14\u0e1a\u0e0a\u0e19\u0e1b\u0e23\u0e30\u0e16\u0e21\u0e28\u0e01\u0e29\u0e32\u0e1b\u0e17 5",
+   "stratum": "enriched"
+  },
+  {
+   "item": 20,
+   "record_id": 12929,
+   "doi": "10.1145/3839592.3839688",
+   "title": "Computational Algorithms for Dynamic Physical Education Content Generation via AIGC and Student Motion Data Fusion",
+   "stratum": "enriched"
+  },
+  {
+   "item": 21,
+   "record_id": 14180,
+   "doi": "10.1109/educon62633.2025.11016517",
+   "title": "Evaluating the Impact of Assistive AI Tools on Learning Outcomes and Ethical Considerations in Programming Education",
+   "stratum": "enriched"
+  },
+  {
+   "item": 22,
+   "record_id": 9397,
+   "doi": "10.1097/gox.0000000000005319",
+   "title": "PSTM Abstract Supplement Table of Contents",
+   "stratum": "enriched"
+  },
+  {
+   "item": 23,
+   "record_id": 4988,
+   "doi": "10.1080/01443410.2026.2680187",
+   "title": "The effect of prompt engineering-based structured AI-assisted feedback on pre-service physics teachers\u2019 inquiry-based science teaching self-efficacy and feedback literacy",
+   "stratum": "enriched"
+  },
+  {
+   "item": 24,
+   "record_id": 2057,
+   "doi": "10.48161/qaj.v5n2a1772",
+   "title": "A Smart ChatGPT Mobile Application for Improving C# Programming Skills for Students in Educational Institutions",
+   "stratum": "enriched"
+  },
+  {
+   "item": 25,
+   "record_id": 4347,
+   "doi": "10.3946/kjme.2025.104",
+   "title": "Make your teaching generative artificial intelligence-ready: a 1-hour workshop for health professions educators",
+   "stratum": "enriched"
+  },
+  {
+   "item": 26,
+   "record_id": 2294,
+   "doi": "10.3390/educsci15080997",
+   "title": "Generative AI-Enhanced Virtual Reality Simulation for Pre-Service Teacher Education: A Mixed-Methods Analysis of Usability and Instructional Utility for Course Integration",
+   "stratum": "random"
+  },
+  {
+   "item": 27,
+   "record_id": 1043,
+   "doi": "10.22159/ijss.2024v13i1.52834",
+   "title": "AI VERSUS HUMAN GRADERS: ASSESSING THE ROLE OF LARGE LANGUAGE MODELS IN HIGHER EDUCATION",
+   "stratum": "random"
+  },
+  {
+   "item": 28,
+   "record_id": 1741,
+   "doi": "10.1186/s41239-024-00446-5",
+   "title": "Would ChatGPT-facilitated programming mode impact college students\u2019 programming behaviors, performances, and perceptions? An empirical study",
+   "stratum": "enriched"
+  },
+  {
+   "item": 29,
+   "record_id": 5000,
+   "doi": "10.64938/bijsi.v10si1.25.oct005",
+   "title": "AI-Based Language Tools for Engineering Students: Rural Perspectives",
+   "stratum": "enriched"
+  },
+  {
+   "item": 30,
+   "record_id": 7065,
+   "doi": "10.12688/f1000research.183558.2",
+   "title": "Effectiveness of a Mobile Application with an AI-Powered Chatbot to Enhance Nursing Students' Awareness of Substance Abuse Prevention: An Interventional Study",
+   "stratum": "enriched"
+  },
+  {
+   "item": 31,
+   "record_id": 3501,
+   "doi": "10.1002/jcal.70210",
+   "title": "When Generative AI Meets Socratic Method: Investigating Programming Learning Dynamics Through Behaviours, Interaction Qualities and Perceptions",
+   "stratum": "enriched"
+  },
+  {
+   "item": 32,
+   "record_id": 569,
+   "doi": "10.1109/tlt.2024.3384765",
+   "title": "Teaching Plan Generation and Evaluation With GPT-4: Unleashing the Potential of LLM in Instructional Design",
+   "stratum": "random"
+  },
+  {
+   "item": 33,
+   "record_id": 13606,
+   "doi": "10.58459/icce.2025.5931",
+   "title": "Generative AI pedagogical agent as learners' inquiry assistant: Designing and implementing Situational Teaching",
+   "stratum": "enriched"
+  },
+  {
+   "item": 34,
+   "record_id": 6546,
+   "doi": "10.1177/13621688251413650",
+   "title": "Improving L2 vocabulary retention and learning engagement through L1 traditional stories in review activities using ChatGPT-generated questions",
+   "stratum": "enriched"
+  },
+  {
+   "item": 35,
+   "record_id": 2981,
+   "doi": "10.1097/jcma.0000000000000955",
+   "title": "ChatGPT surges ahead: GPT-4 has arrived in the arena of medical research",
+   "stratum": "random"
+  },
+  {
+   "item": 36,
+   "record_id": 8219,
+   "doi": null,
+   "title": "La tutor\u00eda acad\u00e9mica como estrategia de acompa\u00f1amiento en educaci\u00f3n a distancia: Seguimiento, desempe\u00f1o y avances tecnol\u00f3gicos en 2024",
+   "stratum": "random"
+  },
+  {
+   "item": 37,
+   "record_id": 8388,
+   "doi": "10.61587/actaeducation-2025-3-00003",
+   "title": "\u041a\u0420\u0418\u0422\u0415\u0420\u0418\u0418, \u041f\u041e\u041a\u0410\u0417\u0410\u0422\u0415\u041b\u0418 \u0418 \u0423\u0420\u041e\u0412\u041d\u0418 \u0421\u0424\u041e\u0420\u041c\u0418\u0420\u041e\u0412\u0410\u041d\u041d\u041e\u0421\u0422\u0418 \u0426\u0418\u0424\u0420\u041e\u0412\u041e\u0419 \u0413\u0420\u0410\u041c\u041e\u0422\u041d\u041e\u0421\u0422\u0418 \u0421\u0422\u0423\u0414\u0415\u041d\u0422\u041e\u0412 \u041d\u0415\u041f\u0420\u041e\u0424\u0418\u041b\u042c\u041d\u042b\u0425 \u041d\u0410\u041f\u0420\u0410\u0412\u041b\u0415\u041d\u0418\u0419",
+   "stratum": "random"
+  },
+  {
+   "item": 38,
+   "record_id": 497,
+   "doi": "10.1186/s40594-026-00631-0",
+   "title": "Inquiry-based learning in STEM education: the impact of generative AI-based Chatbots on primary school students\u2019 problem posing ability in science",
+   "stratum": "enriched"
+  },
+  {
+   "item": 39,
+   "record_id": 2356,
+   "doi": "10.1186/s41239-026-00617-6",
+   "title": "What students ask matters: LLM interaction depth, task quality, and immediate recall in higher education",
+   "stratum": "enriched"
+  },
+  {
+   "item": 40,
+   "record_id": 8386,
+   "doi": "10.1097/01.ccm.0001188744.52237.cf",
+   "title": "1687: AI-DRIVEN JUST-IN-TIME TRAINING FOR HANDLING DIFFICULT CONVERSATIONS",
+   "stratum": "enriched"
+  },
+  {
+   "item": 41,
+   "record_id": 6286,
+   "doi": "10.58578/tsaqofah.v5i1.4758",
+   "title": "Perilaku Mahasiswa dalam Menggunakan ChatGPT dalam Menunjang Proses Pembelajaran di Program Studi Perpustakaan dan Ilmu Informasi",
+   "stratum": "random"
+  },
+  {
+   "item": 42,
+   "record_id": 4671,
+   "doi": "10.52834/jmr.v21i41.286",
+   "title": "The Impact of Using ChatGPT and Grammarly on developing Iraqi EFL University Students' Academic Essay Writing",
+   "stratum": "enriched"
+  },
+  {
+   "item": 43,
+   "record_id": 4127,
+   "doi": "10.46328/ijte.5335",
+   "title": "AI Literacy and Academic Performance: A Cross-Sectional Analysis of Senior High School Students",
+   "stratum": "random"
+  },
+  {
+   "item": 44,
+   "record_id": 9050,
+   "doi": "10.52208/aellj.v10i2.1579",
+   "title": "THE IMPACT OF ARTIFICIAL INTELLIGENCE LITERACY ON LECTURERS' ACADEMIC PERFORMANCE AND WORKFLOW EFFICIENCY",
+   "stratum": "random"
+  },
+  {
+   "item": 45,
+   "record_id": 6250,
+   "doi": "10.66053/jaaie.v1i1.3",
+   "title": "Student Perceptions of AI in Learning: The Role of Credibility and Emo-tional Well-Being in Supporting Critical Thinking Skills",
+   "stratum": "random"
+  },
+  {
+   "item": 46,
+   "record_id": 8808,
+   "doi": "10.1145/3735652",
+   "title": "Improving Knowledge Tracing through Multi-Source Scaling with Decoder-Only Transformers",
+   "stratum": "random"
+  },
+  {
+   "item": 47,
+   "record_id": 13800,
+   "doi": "10.1145/3632620.3671103",
+   "title": "Evaluating Contextually Personalized Programming Exercises Created with Generative AI",
+   "stratum": "random"
+  },
+  {
+   "item": 48,
+   "record_id": 14360,
+   "doi": "10.1109/access.2024.3443621",
+   "title": "Navigating the Pitfalls: Analyzing the Behavior of LLMs as a Coding Assistant for Computer Science Students\u2014A Systematic Review of the Literature",
+   "stratum": "random"
+  },
+  {
+   "item": 49,
+   "record_id": 7961,
+   "doi": null,
+   "title": "PENGARUH PENGGUNAAN AI GENERATIF SEBAGAI ASISTEN BELAJAR TERHADAP LITERASI DIGITAL KRITIS MAHASISWA TEKNIK INFORMATIKA",
+   "stratum": "enriched"
+  },
+  {
+   "item": 50,
+   "record_id": 9968,
+   "doi": "10.48550/arxiv.2603.00465",
+   "title": "Optimizing In-Context Demonstrations for LLM-based Automated Grading",
+   "stratum": "random"
+  },
+  {
+   "item": 51,
+   "record_id": 7915,
+   "doi": "10.1016/j.caeo.2024.100171",
+   "title": "What are artificial intelligence literacy and competency? A comprehensive framework to support them",
+   "stratum": "random"
+  },
+  {
+   "item": 52,
+   "record_id": 2195,
+   "doi": "10.1080/19415257.2024.2407413",
+   "title": "What is the machine? Teachers\u2019 professional learning about generative artificial intelligence as tutors for children",
+   "stratum": "random"
+  },
+  {
+   "item": 53,
+   "record_id": 3215,
+   "doi": "10.1097/01.nep.0000000000001129",
+   "title": "ChatGPT: Disruptive Educational Technology",
+   "stratum": "random"
+  },
+  {
+   "item": 54,
+   "record_id": 9338,
+   "doi": "10.1093/af/vfag010",
+   "title": "From isolated data to integrated ecosystems: the artificial intelligence revolution in precision livestock farming",
+   "stratum": "random"
+  },
+  {
+   "item": 55,
+   "record_id": 11741,
+   "doi": "10.1145/3636243.3636252",
+   "title": "Evaluating LLM-generated Worked Examples in an Introductory Programming Course",
+   "stratum": "random"
+  },
+  {
+   "item": 56,
+   "record_id": 6820,
+   "doi": "10.1088/1361-6404/ae68a7",
+   "title": "False understanding in AI-assisted physics problem solving: a theoretical framework",
+   "stratum": "random"
+  },
+  {
+   "item": 57,
+   "record_id": 11709,
+   "doi": "10.1109/iconat61936.2024.10774681",
+   "title": "Study on Students' Perceptions of Generative AI in Learning Programming Courses",
+   "stratum": "random"
+  },
+  {
+   "item": 58,
+   "record_id": 12305,
+   "doi": "10.1109/mercon71835.2026.11691352",
+   "title": "Ontology-Guided Pedagogically Meaningful Knowledge Component Extraction from Code",
+   "stratum": "random"
+  },
+  {
+   "item": 59,
+   "record_id": 6812,
+   "doi": "10.55606/jurribah.v4i3.6354",
+   "title": "Efektivitas Penggunaan ChatGPT dalam Pembelajaran Menulis Tingkat Lanjut Bahasa Prancis Mahasiswa UNIMED",
+   "stratum": "enriched"
+  },
+  {
+   "item": 60,
+   "record_id": 1609,
+   "doi": "10.51636/jotd.2026.08.22.2.1",
+   "title": "The Educational Effects of Generative AI in University Programming Courses: Focusing on AI Literacy Enhancement and Changes in the Perceived AI Literacy Gap",
+   "stratum": "enriched"
+  },
+  {
+   "item": 61,
+   "record_id": 1463,
+   "doi": "10.12669/pjms.42.8.14827",
+   "title": "Impact of ChatGPT-assisted personalized learning on teaching acute abdomen to undergraduate medical students: A randomized crossover study",
+   "stratum": "enriched"
+  },
+  {
+   "item": 62,
+   "record_id": 8200,
+   "doi": "10.70262/riesafd.v3i2.2026.113",
+   "title": "Impacto de la IA en el aprendizaje de c\u00e1lculo diferencial en estudiantes universitarios",
+   "stratum": "enriched"
+  },
+  {
+   "item": 63,
+   "record_id": 4903,
+   "doi": null,
+   "title": "Satisfacci\u00f3n estudiantil con el uso del ChatGPT para el estudio de la Anatom\u00eda Humana: Student satisfaction with the use of ChatGPT for the study of Human Anatomy",
+   "stratum": "enriched"
+  },
+  {
+   "item": 64,
+   "record_id": 7574,
+   "doi": "10.29408/veles.v8i3.27856",
+   "title": "Evaluating the Impact of AI Tools on Grammar Mastery: A Comparative Study of Learning Outcomes",
+   "stratum": "enriched"
+  },
+  {
+   "item": 65,
+   "record_id": 9077,
+   "doi": "10.24114/jtp.v17i2.64902",
+   "title": "PENERAPAN MODEL PEMBELAJARAN ADVANCE ORGANIZER BERBANTUAN ARTIFICIAL INTELLIGENCE (AI) TERHADAP PENINGKATAN PEMAHAMAN KONSEP MAHASISWA PENDIDIKAN FISIKA UNIVERSITAS SULAWESI BARAT",
+   "stratum": "enriched"
+  },
+  {
+   "item": 66,
+   "record_id": 2979,
+   "doi": "10.24368/jates417",
+   "title": "The Dual-Edged Sword of LLMs in Programming Education: Boosting Productivity While Impeding Algorithmic Thinking : A Mixed-Methods Study",
+   "stratum": "enriched"
+  },
+  {
+   "item": 67,
+   "record_id": 10639,
+   "doi": "10.1115/imece2024-145908",
+   "title": "Natural Language Processing Applications in Mechanical Engineering Education",
+   "stratum": "random"
+  },
+  {
+   "item": 68,
+   "record_id": 1604,
+   "doi": "10.66031/jinea.v2i1.160",
+   "title": "The Effect of Artificial Intelligence\u2013Based Learning on Students\u2019 Mathematical Thinking in Secondary Education",
+   "stratum": "enriched"
+  },
+  {
+   "item": 69,
+   "record_id": 1434,
+   "doi": "10.21070/acopen.11.2026.15148",
+   "title": "Generative Artificial Intelligence Integration Yields Higher High School Poster Writing Performance",
+   "stratum": "enriched"
+  },
+  {
+   "item": 70,
+   "record_id": 5920,
+   "doi": "10.33394/jk.v12i3.19897",
+   "title": "Developing an AI-Assisted Project-Based Learning Model Integrating Pedagogical Deep Learning Principles for Tenth-Grade Students\u2019 Writing Skills",
+   "stratum": "enriched"
+  },
+  {
+   "item": 71,
+   "record_id": 3310,
+   "doi": "10.37985/educative.v1i2.75",
+   "title": "The Potential Utilizing ChatGPT for Education and Teaching Students: Understanding, Prospects, Challenges, and Utilization\"",
+   "stratum": "random"
+  },
+  {
+   "item": 72,
+   "record_id": 10031,
+   "doi": "10.1145/3808045.3808059",
+   "title": "Upskilling UX Designers for AI-Native Work: A Pedagogical Framework and Empirical Evaluation",
+   "stratum": "random"
+  },
+  {
+   "item": 73,
+   "record_id": 4449,
+   "doi": "10.31538/alsuna.v7i1.5175",
+   "title": "Utilization of the Use ChatGPT among Students the Arabic Language Education Department North Sumatera State Islamic University Medan",
+   "stratum": "random"
+  },
+  {
+   "item": 74,
+   "record_id": 3402,
+   "doi": "10.3390/bs16040514",
+   "title": "GenAI-Supported Flipped Learning in Preservice Chemistry Teacher Education: Lesson-Design Performance, Learning Attitude, Self-Regulated Learning, and Critical Thinking Awareness",
+   "stratum": "enriched"
+  },
+  {
+   "item": 75,
+   "record_id": 6180,
+   "doi": "10.24195/2617-6688-2024-4-10",
+   "title": "Responsible use of ChatGPT in ESL: teachers\u2019 perspective",
+   "stratum": "random"
+  },
+  {
+   "item": 76,
+   "record_id": 4017,
+   "doi": "10.3390/su18189379",
+   "title": "Sustainable Career Readiness in the GenAI Era: Student Perceptions of Automation, Entry-Level Employment, and Pedagogical Support",
+   "stratum": "random"
+  },
+  {
+   "item": 77,
+   "record_id": 9676,
+   "doi": null,
+   "title": "Improving Learning Outcomes in Advanced Mathematics for Underprepared University Students through AI-Driven Educational Tools",
+   "stratum": "enriched"
+  },
+  {
+   "item": 78,
+   "record_id": 6723,
+   "doi": "10.3389/feduc.2024.1378564",
+   "title": "Developing scientific entrepreneurship and complex thinking skills: creating narrative scripts using ChatGPT",
+   "stratum": "enriched"
+  },
+  {
+   "item": 79,
+   "record_id": 13959,
+   "doi": "10.1109/fie61694.2024.10892916",
+   "title": "Exploring the Effectiveness of AI-Enabled Microlearning in Database Design and Programming Course",
+   "stratum": "random"
+  },
+  {
+   "item": 80,
+   "record_id": 5795,
+   "doi": "10.48310/chemedu.2025.18719.1315",
+   "title": "The effect of AI tools on academic achievement in chemistry education",
+   "stratum": "enriched"
+  },
+  {
+   "item": 81,
+   "record_id": 2877,
+   "doi": "10.30659/jamr.7.1.52-63",
+   "title": "Utilizing ChatGPT as a Pedagogical Tool to Enhance English as a Foreign Language Learners\u2019 Basic English Grammar Competence: A Case Study at an Islamic Boarding School",
+   "stratum": "random"
+  },
+  {
+   "item": 82,
+   "record_id": 4503,
+   "doi": "10.1016/j.jeap.2026.101638",
+   "title": "RETRACTED: Guided and unguided GenAI tasks for learning academic spoken collocations",
+   "stratum": "enriched"
+  },
+  {
+   "item": 83,
+   "record_id": 1773,
+   "doi": "10.36828/newvistas.393",
+   "title": "Poster: Adaptive AI tutors in extended reality environments: enhancing cognitive engagement through neurofeedback",
+   "stratum": "random"
+  },
+  {
+   "item": 84,
+   "record_id": 4997,
+   "doi": "10.26858/ijole.v10i1.83711",
+   "title": "Students\u2019 Perceptions on the Digital Literacy and Writing Skills Using Local Indigenous Poem: Google Gemini Interactive Multimedia Approach",
+   "stratum": "enriched"
+  },
+  {
+   "item": 85,
+   "record_id": 7622,
+   "doi": null,
+   "title": "Using AI-Generated Scenarios to Enhance Learning of The Emergency Assessment Process",
+   "stratum": "random"
+  },
+  {
+   "item": 86,
+   "record_id": 9733,
+   "doi": null,
+   "title": "Worked-Out Examples with ChatGPT-Based Explanations: A Statistics Activity",
+   "stratum": "enriched"
+  },
+  {
+   "item": 87,
+   "record_id": 7258,
+   "doi": "10.9734/air/2026/v27i31652",
+   "title": "Digital Platform\u2013Based Instructions and Adolescents\u2019 Knowledge and Perception of Sexual-Risk Behaviour Consequences in Public Secondary Schools in Owerri Municipal, Nigeria",
+   "stratum": "enriched"
+  },
+  {
+   "item": 88,
+   "record_id": 1009,
+   "doi": "10.1007/s10639-026-14086-x",
+   "title": "Exploring the impact of persona-based large language models on user experience in educational settings",
+   "stratum": "random"
+  },
+  {
+   "item": 89,
+   "record_id": 8722,
+   "doi": "10.1080/17483107.2025.2540494",
+   "title": "RETRACTED ARTICLE: Utilizing artificial intelligence to enhance social connections \u2013 the alleviating effect of emotionally intelligent chatbots on loneliness",
+   "stratum": "random"
+  },
+  {
+   "item": 90,
+   "record_id": 10672,
+   "doi": "10.1109/acit69831.2026.11700007",
+   "title": "Explanation First Prompting for Reviewing AI Programming Answers in Undergraduate Courses",
+   "stratum": "random"
+  },
+  {
+   "item": 91,
+   "record_id": 6315,
+   "doi": "10.59841/saber.v3i1.2283",
+   "title": "Penerapan Artificial Intelligence-ChatGPT dalam Pembelajaran Matematika Diskrit",
+   "stratum": "enriched"
+  },
+  {
+   "item": 92,
+   "record_id": 9588,
+   "doi": null,
+   "title": "A Human-in-the-Loop Pipeline for Multi-Class SRL Classification",
+   "stratum": "random"
+  },
+  {
+   "item": 93,
+   "record_id": 3287,
+   "doi": "10.55214/26410230.v7i1.5627",
+   "title": "Integrating GAI tools and scaffolding-based learning to enhance learning outcomes in English-medium programming courses",
+   "stratum": "enriched"
+  },
+  {
+   "item": 94,
+   "record_id": 5832,
+   "doi": "10.1016/j.teln.2026.05.019",
+   "title": "Enhancing academic assessment: Leveraging AI for grading scholarly student papers",
+   "stratum": "random"
+  },
+  {
+   "item": 95,
+   "record_id": 12234,
+   "doi": null,
+   "title": "\"Help Me, But Don't Track Me\": Intervention Timing and Privacy Boundaries for Process-Aware AI Tutors",
+   "stratum": "random"
+  },
+  {
+   "item": 96,
+   "record_id": 9853,
+   "doi": null,
+   "title": "Anchoring Concepts Influence Essay Conceptual Structure and Test Performance",
+   "stratum": "enriched"
+  },
+  {
+   "item": 97,
+   "record_id": 6486,
+   "doi": "10.56314/edulec.v6i2.597",
+   "title": "Beyond Literal Translation: AI-Assisted Pedagogical Translation for Developing University Student Pragmatic Competence",
+   "stratum": "enriched"
+  },
+  {
+   "item": 98,
+   "record_id": 1554,
+   "doi": "10.1177/07356331241305519",
+   "title": "Multiple Generative AI Pedagogical Agents in Augmented Reality Environments: A Study on Implementing the 5E Model in Science Education",
+   "stratum": "enriched"
+  },
+  {
+   "item": 99,
+   "record_id": 2364,
+   "doi": "10.1016/j.caeo.2026.100425",
+   "title": "Evaluating Large Language Models for career guidance: A comparative analysis of computing competency recommendations across ten African countries",
+   "stratum": "random"
+  },
+  {
+   "item": 100,
+   "record_id": 9522,
+   "doi": "10.1111/bjet.70005",
+   "title": "Enhancing Self-Directed Learning and Python Mastery through Integration of a Large Language Model and Learning Analytics Dashboard",
+   "stratum": "enriched"
+  },
+  {
+   "item": 101,
+   "record_id": 2594,
+   "doi": "10.31004/joecy.v5i3.5047",
+   "title": "Implementation of Chatgpt As A Learning Supervision Assistant In Analyzing Rpp And LKPD In Middle Schools",
+   "stratum": "random"
+  },
+  {
+   "item": 102,
+   "record_id": 11249,
+   "doi": "10.1177/10732748251319487",
+   "title": "Can the Use of Artificial Intelligence-Generated Content Bridge the Cancer Knowledge Gap? A Longitudinal Study With Health Self-Efficacy as a Mediator and Educational Level as a Moderator",
+   "stratum": "random"
+  },
+  {
+   "item": 103,
+   "record_id": 6542,
+   "doi": "10.53103/cjess.v6i5.573",
+   "title": "Practices and Attitudes Regarding MOOCs and Artificial Intelligence Use among Medical Students in Morocco",
+   "stratum": "random"
+  },
+  {
+   "item": 104,
+   "record_id": 3262,
+   "doi": "10.63544/ijss.v4i3.150",
+   "title": "The Future Classroom: Integrating AI and Social Media for Adaptive Learning",
+   "stratum": "enriched"
+  },
+  {
+   "item": 105,
+   "record_id": 2003,
+   "doi": "10.24903/bej.v8i2.2490",
+   "title": "Development and Preliminary Evaluation of a Dayak Paser Culture-Contextualized Mathematics Chatbot for Fraction Learning among Elementary School Students in Balikpapan",
+   "stratum": "enriched"
+  },
+  {
+   "item": 106,
+   "record_id": 8366,
+   "doi": "10.31822/jomat.2024-9-3-231",
+   "title": "The performance of artificial intelligence in the exams of tourist guidance",
+   "stratum": "random"
+  },
+  {
+   "item": 107,
+   "record_id": 12326,
+   "doi": "10.1109/fie63693.2025.11328282",
+   "title": "WIP: PicPrompt - A Novel Social Prompt Engineering Game Based Tool for Informal Learning in K-12",
+   "stratum": "random"
+  },
+  {
+   "item": 108,
+   "record_id": 12193,
+   "doi": "10.62792/ut.icfra.y2026.i1.pp27",
+   "title": "ARTIFICIAL INTELLIGENCE USE AND PERCEPTIONS AMONG NURSING STUDENTS: A CROSS-SECTIONAL STUDY",
+   "stratum": "random"
+  },
+  {
+   "item": 109,
+   "record_id": 6438,
+   "doi": "10.24191/jeesr.v27i1.009",
+   "title": "Engineering Malaysia\u2019s Competitive Edge: Prompt Engineering as Critical Skill for Future Workforce Development",
+   "stratum": "random"
+  },
+  {
+   "item": 110,
+   "record_id": 8700,
+   "doi": "10.63056/academia.5.3(s10).2026.2382",
+   "title": "Responsible Use of Artificial Intelligence in Graduate Research: An Islamic Ethical Perspective",
+   "stratum": "random"
+  },
+  {
+   "item": 111,
+   "record_id": 10286,
+   "doi": "10.1145/3626253.3635511",
+   "title": "My Learnings from Allowing Large Language Models in Introductory Computer Science Classes",
+   "stratum": "random"
+  },
+  {
+   "item": 112,
+   "record_id": 1444,
+   "doi": "10.71317/rjsa.004.03(s5).1016",
+   "title": "Effect of Generative AI Tools on Critical Thinking and Sustainable Learning Skills among Secondary School Students in Swat, Pakistan",
+   "stratum": "enriched"
+  },
+  {
+   "item": 113,
+   "record_id": 8305,
+   "doi": "10.61476/a7n07d67",
+   "title": "Pelatihan Pengembangan Bahan Ajar Komik Berbantuan AI dan Dampaknya Terhadap Hasil Belajar",
+   "stratum": "random"
+  },
+  {
+   "item": 114,
+   "record_id": 2168,
+   "doi": "10.25020/je.2026.46.2.229",
+   "title": "A Systematic Review of Research on Earth Science Education Utilizing Generative Artificial Intelligence: Analysis of Cognitive Levels and Assessment of Curriculum Alignment Using the DOK Model",
+   "stratum": "random"
+  },
+  {
+   "item": 115,
+   "record_id": 782,
+   "doi": "10.1080/10494820.2026.2641762",
+   "title": "Integrating generative artificial intelligence into secondary school programming education: model design and empirical evidence",
+   "stratum": "random"
+  },
+  {
+   "item": 116,
+   "record_id": 6792,
+   "doi": "10.36989/didaktik.v12i03.18564",
+   "title": "PEMANFAATAN ARTIFICIAL INTELLIGENCE CHATGPT DALAM MENINGKATKAN KREATIVITAS SISWA DI SMK PERTIWI KUNINGAN",
+   "stratum": "enriched"
+  },
+  {
+   "item": 117,
+   "record_id": 10609,
+   "doi": "10.1609/aaai.v38i21.30364",
+   "title": "A Chain-of-Thought Prompting Approach with LLMs for Evaluating Students' Formative Assessment Responses in Science",
+   "stratum": "random"
+  },
+  {
+   "item": 118,
+   "record_id": 2600,
+   "doi": "10.30958/aje.13-1-10",
+   "title": "If You Can't Beat It, Join It! Teaching and Learning Mathematics with ChatGPT and Key Prompts to Stimulate Self-Learning",
+   "stratum": "random"
+  },
+  {
+   "item": 119,
+   "record_id": 6659,
+   "doi": "10.22275/see.30.4.01",
+   "title": "The Impact of GenAIs on Perceived Productive Skills and Affects of Pre-service English Teachers in Extensive Reading",
+   "stratum": "enriched"
+  },
+  {
+   "item": 120,
+   "record_id": 9643,
+   "doi": null,
+   "title": "Integrating Ethics for Sustainability into Mathematics Instruction Using Generative AI",
+   "stratum": "random"
+  },
+  {
+   "item": 121,
+   "record_id": 8817,
+   "doi": "10.3389/frbhe.2024.1503793",
+   "title": "Harnessing pluralism in behavioral public policy requires insights from computational social science",
+   "stratum": "enriched"
+  },
+  {
+   "item": 122,
+   "record_id": 112,
+   "doi": "10.3390/aieduc1010004",
+   "title": "STEM Undergraduates\u2019 Perceptions of AI Chatbots: A Cross-Sectional Descriptive Survey",
+   "stratum": "random"
+  },
+  {
+   "item": 123,
+   "record_id": 12975,
+   "doi": "10.1109/iciteics64870.2025.11341261",
+   "title": "Automated Scrutiny of Question Papers Using Natural Language Processing and Large Language Models",
+   "stratum": "random"
+  },
+  {
+   "item": 124,
+   "record_id": 8733,
+   "doi": "10.1093/jalm/jfad038",
+   "title": "Let\u2019s Face It: Chatbots Are Here to Stay",
+   "stratum": "random"
+  },
+  {
+   "item": 125,
+   "record_id": 7643,
+   "doi": "10.18778/0867-5856.2025.23",
+   "title": "Educational challenges for tour leader candidates in tourism and recreation studies: The case of Adam Mickiewicz University in Pozna\u0144",
+   "stratum": "random"
+  },
+  {
+   "item": 126,
+   "record_id": 11580,
+   "doi": "10.1109/ict4da67218.2025.11282535",
+   "title": "Redefining Open-ended Assessment Authorship: Empirical Insights on Mind versus Machine Assessments in Computer Science",
+   "stratum": "enriched"
+  },
+  {
+   "item": 127,
+   "record_id": 13860,
+   "doi": "10.1145/3639474.3640076",
+   "title": "Does ChatGPT Help With Introductory Programming? An Experiment of Students Using ChatGPT in CS1",
+   "stratum": "enriched"
+  },
+  {
+   "item": 128,
+   "record_id": 9237,
+   "doi": "10.5406/19452349.41.2.03",
+   "title": "Black Musicological World-Making in Who Hears Here?",
+   "stratum": "random"
+  },
+  {
+   "item": 129,
+   "record_id": 9728,
+   "doi": "10.1007/s10639-023-12364-6",
+   "title": "Effect of Robotics-Enhanced Project-Based Learning Approach on Students&apos; Conceptual Understanding and Motivation in Linear Motion in Physics in Selected Rwandan Secondary School",
+   "stratum": "enriched"
+  },
+  {
+   "item": 130,
+   "record_id": 11310,
+   "doi": "10.1145/3698205.3733937",
+   "title": "WIP: Leveraging LLM for Sentiment Analysis of Student Reflection Texts from a Large Undergraduate Course",
+   "stratum": "random"
+  },
+  {
+   "item": 131,
+   "record_id": 4587,
+   "doi": "10.36941/jesr-2024-0047",
+   "title": "How ChatGPT Will Shape the Teaching Learning Landscape in Future?",
+   "stratum": "random"
+  },
+  {
+   "item": 132,
+   "record_id": 5550,
+   "doi": "10.29408/veles.v7i3.21209",
+   "title": "Are You Creative? What College-Level English Language Learners Think of AI Writing Assistants",
+   "stratum": "random"
+  },
+  {
+   "item": 133,
+   "record_id": 2978,
+   "doi": "10.1891/re-25-14",
+   "title": "A Strategic Analysis of Generative Artificial Intelligence Simulated Client Role-Play Training in Rehabilitation Counseling Education",
+   "stratum": "random"
+  },
+  {
+   "item": 134,
+   "record_id": 8185,
+   "doi": "10.1016/j.eswa.2026.132119",
+   "title": "Teach-to-reason with scoring: Self-explainable rationale-driven multi-trait essay scoring",
+   "stratum": "random"
+  },
+  {
+   "item": 135,
+   "record_id": 304,
+   "doi": "10.65339/ijsair.v2.i2.261",
+   "title": "AI Chatbots on Students Acquisition of Home Economics Skills in Secondary Schools in Solano, Nueva Vizcaya",
+   "stratum": "enriched"
+  },
+  {
+   "item": 136,
+   "record_id": 9785,
+   "doi": null,
+   "title": "Tracing Conceptual Overgeneralization in Middle School Students' Reasoning about Quantum Randomness",
+   "stratum": "enriched"
+  },
+  {
+   "item": 137,
+   "record_id": 6958,
+   "doi": "10.2196/80290",
+   "title": "AI Virtual Human\u2013Augmented Game-Based Teaching to Enhance Emotional Intelligence in Nursing Students: Protocol for a Single-Group Pretest-Posttest Action Research Study",
+   "stratum": "enriched"
+  },
+  {
+   "item": 138,
+   "record_id": 10364,
+   "doi": "10.1145/3770761.3777327",
+   "title": "To Tell or to Ask? Comparing the Effects of Targeted vs. Socratic AI Hints",
+   "stratum": "enriched"
+  },
+  {
+   "item": 139,
+   "record_id": 9699,
+   "doi": "10.1007/s10639-024-13107-x",
+   "title": "The Impact of a Large Language Model-Based Programming Learning Environment on Students&apos; Motivation and Programming Ability",
+   "stratum": "enriched"
+  },
+  {
+   "item": 140,
+   "record_id": 8903,
+   "doi": "10.19136/etie.v8n15.6343",
+   "title": "Implicaciones \u00e9ticas del uso de Inteligencia Artificial en educaci\u00f3n superior",
+   "stratum": "random"
+  },
+  {
+   "item": 141,
+   "record_id": 3435,
+   "doi": "10.1016/j.caeai.2026.100640",
+   "title": "Creating an AI-powered platform for generating modelling problems: A case study on direct variation in secondary school mathematics",
+   "stratum": "enriched"
+  },
+  {
+   "item": 142,
+   "record_id": 3910,
+   "doi": "10.54254/2753-7048/46/20230649",
+   "title": "The Advantages and Disadvantages of ChatGPT in Humanities, Social Sciences and STEM Education: From a Comparative Perspective",
+   "stratum": "random"
+  },
+  {
+   "item": 143,
+   "record_id": 9222,
+   "doi": null,
+   "title": "ASISTENTE INTERACTIVO PARA LA RESOLUCI\u00d3N DE PROBLEMAS MATEM\u00c1TICOS USANDO GESTOS E INTELIGENCIA ARTIFICIAL GENERATIVA: VIRTUAL ASSISTANT TO IMPROVE USER SATISFACTION AND INCREASE CONVERSION RATE IN E-COMMERCE PLATFORMS",
+   "stratum": "enriched"
+  },
+  {
+   "item": 144,
+   "record_id": 7135,
+   "doi": "10.53695/jas.v5i3.1132",
+   "title": "Pembuatan Modul Ajar Matematika Berbasis PjBL Berbantuan Teknologi Artificial Intelligence ChatGPT pada MGMP Matematika SMP",
+   "stratum": "enriched"
+  },
+  {
+   "item": 145,
+   "record_id": 12408,
+   "doi": "10.1109/iciet69664.2026.11561587",
+   "title": "Students\u2019 Perceptions of Generative AI Use in Teaching and Learning in Higher Education",
+   "stratum": "random"
+  },
+  {
+   "item": 146,
+   "record_id": 11888,
+   "doi": "10.1109/fie61694.2024.10893294",
+   "title": "Enhancing CS Education with LAs Using AI-Empowered AIELA Program",
+   "stratum": "random"
+  },
+  {
+   "item": 147,
+   "record_id": 5905,
+   "doi": "10.52058/2786-6165-2026-5(47)-283-294",
+   "title": "AI TOOLS AND DIPLOMATIC GENRE NORMS: EVIDENCE FROM AN ENGLISH FOR INTERNATIONAL DOCUMENTS ESP COURSE",
+   "stratum": "enriched"
+  },
+  {
+   "item": 148,
+   "record_id": 9335,
+   "doi": "10.1097/01.jcma.0001177672.68128.57",
+   "title": "Title Index",
+   "stratum": "enriched"
+  },
+  {
+   "item": 149,
+   "record_id": 3839,
+   "doi": "10.64348/zije.2026383",
+   "title": "Effect of Artificial Intelligence Tools on Achievement in Complex STEM Concepts among Senior Secondary School Students in Ilorin, Kwara State, Nigeria",
+   "stratum": "random"
+  },
+  {
+   "item": 150,
+   "record_id": 11711,
+   "doi": "10.1007/978-3-032-29770-9_29",
+   "title": "Tracing Prompt-Level Interaction Trajectories to Understand Student Learning with LLMs in Programming Education",
+   "stratum": "random"
+  },
+  {
+   "item": 151,
+   "record_id": 3419,
+   "doi": "10.24127/ajpm.v14i4.12091",
+   "title": "ENHANCING STUDENTS CRITICAL THINKING THROUGH PROBLEM-BASED LEARNING WITH CHATGPT AND GEOGEBRA",
+   "stratum": "enriched"
+  },
+  {
+   "item": 152,
+   "record_id": 1680,
+   "doi": "10.3389/feduc.2025.1574477",
+   "title": "One year in the classroom with ChatGPT: empirical insights and transformative impacts",
+   "stratum": "enriched"
+  },
+  {
+   "item": 153,
+   "record_id": 3249,
+   "doi": "10.3390/educsci16101610",
+   "title": "Longitudinal Associations Between Homework and Examination Performance in Engineering Mathematics",
+   "stratum": "enriched"
+  },
+  {
+   "item": 154,
+   "record_id": 9005,
+   "doi": "10.5281/zenodo.22002760",
+   "title": "AI-Driven Mental Health Intelligence and Early Intervention Framework: An Enterprise Platform Architecture Perspective",
+   "stratum": "random"
+  },
+  {
+   "item": 155,
+   "record_id": 13185,
+   "doi": "10.48550/arxiv.2506.22370",
+   "title": "Can Large Language Models Help Students Prove Software Correctness? An Experimental Study with Dafny",
+   "stratum": "enriched"
+  },
+  {
+   "item": 156,
+   "record_id": 10617,
+   "doi": "10.1109/ife63672.2025.11024985",
+   "title": "Perception of the Integration of Artificial Intelligence and Other Emerging Technologies in Dominican Education from an Ethical Perspective",
+   "stratum": "random"
+  },
+  {
+   "item": 157,
+   "record_id": 14281,
+   "doi": "10.1109/swc65939.2025.00072",
+   "title": "Using an Immersive Virtual Reality Game Guided by Generative AI for Fifth-Grade Science Learning",
+   "stratum": "enriched"
+  },
+  {
+   "item": 158,
+   "record_id": 1494,
+   "doi": "10.56165/kosc.2026.5.3.097",
+   "title": "Application of Generative AI-Based Stepwise Feedback in Programming Education and Analysis of Learners' Problem-Solving Processes",
+   "stratum": "random"
+  },
+  {
+   "item": 159,
+   "record_id": 7545,
+   "doi": null,
+   "title": "\u0421\u0443\u0440\u0430\u043b\u0446\u0430\u0445\u0443\u0439\u0433 \u0434\u044d\u043c\u0436\u0438\u0445 \u0445\u0438\u0439\u043c\u044d\u043b \u043e\u044e\u0443\u043d\u044b \u0447\u0430\u0442\u0431\u043e\u0442\u044b\u043d \u0442\u0443\u0440\u0448\u0438\u043b\u0442, \u04af\u0440 \u0434\u04af\u043d",
+   "stratum": "enriched"
+  },
+  {
+   "item": 160,
+   "record_id": 3932,
+   "doi": "10.55606/concept.v3i3.1403",
+   "title": "The Impact Of Chatgpt Use On Efl Students\u2019 Writing Ability",
+   "stratum": "enriched"
+  },
+  {
+   "item": 161,
+   "record_id": 10348,
+   "doi": "10.3126/irj.v5i1.97111",
+   "title": "Student\u2019s Learning Journey with Generative AI: A Narrative Inquiry into the Transformation of Learning and Teaching Practices in Higher Education",
+   "stratum": "random"
+  },
+  {
+   "item": 162,
+   "record_id": 100,
+   "doi": "10.61797/ijaaiml.v6i1.768",
+   "title": "Human-AI Collaboration in Mathematics Education: Investigating the Impact of Large Language Models on Students Mathematical Reasoning and Critical Thinking",
+   "stratum": "enriched"
+  },
+  {
+   "item": 163,
+   "record_id": 12855,
+   "doi": "10.1109/weef-gedc63419.2024.10854928",
+   "title": "Accelerating Learning with AI: Improving Students\u2019 Capability to Receive and Build Automated Feedback for Programming Courses",
+   "stratum": "random"
+  },
+  {
+   "item": 164,
+   "record_id": 5359,
+   "doi": "10.68114/1658-8797.1026",
+   "title": "The impact of GenAI-based training on developing digital skills and achievement motivation: A quasi-experimental study on the design of e-newspapers among College of Media students at Taibah University",
+   "stratum": "enriched"
+  },
+  {
+   "item": 165,
+   "record_id": 7171,
+   "doi": "10.36312/linov.v10i2.3005",
+   "title": "Pelatihan Pengembangan LKPD Berbasis Keterampilan Proses Sains Berbantuan ChatGPT Bagi Calon Guru Fisika",
+   "stratum": "enriched"
+  },
+  {
+   "item": 166,
+   "record_id": 4031,
+   "doi": "10.18421/tem153-65",
+   "title": "Predictors of the Effective Implementation of Artificial Intelligence Tools in Mathematics Education of Pre-Service Primary Teachers",
+   "stratum": "enriched"
+  },
+  {
+   "item": 167,
+   "record_id": 9435,
+   "doi": "10.1093/ije/dyag089",
+   "title": "Cohort Profile Update: The Swiss Childhood Cancer Survivor Cohort",
+   "stratum": "enriched"
+  },
+  {
+   "item": 168,
+   "record_id": 12747,
+   "doi": "10.1109/cste69562.2026.11649586",
+   "title": "Using Generative AI with Cognitive Scaffolding: A Quasi-Experimental Study in Engineering Education",
+   "stratum": "enriched"
+  },
+  {
+   "item": 169,
+   "record_id": 6408,
+   "doi": "10.63467/red.12.2025.art2",
+   "title": "Exploring Artificial Intelligence Tool Adoption in a Higher Education Faculty\u2019s Pedagogical Practices through Chat: Supporting International Students in Improving Academic Performance",
+   "stratum": "random"
+  },
+  {
+   "item": 170,
+   "record_id": 5811,
+   "doi": "10.32014/2026.2518-1467.1154",
+   "title": "DEVELOPING CRITICAL THINKING THROUGH MODERN CHATBOTS IN CHEMISTRY EDUCATION",
+   "stratum": "random"
+  },
+  {
+   "item": 171,
+   "record_id": 9469,
+   "doi": null,
+   "title": "Balancing Innovation and Integrity in Using Generative AI for a New Computer Programming Assignments Approach",
+   "stratum": "enriched"
+  },
+  {
+   "item": 172,
+   "record_id": 28,
+   "doi": "10.1080/09500693.2025.2574519",
+   "title": "Creating adaptive learning pathways for inquiry-based learning in school science using generative AI large language models",
+   "stratum": "random"
+  },
+  {
+   "item": 173,
+   "record_id": 9901,
+   "doi": "10.1145/3797552.3797572",
+   "title": "A project-based and AI-enhanced teaching framework for interaction design in digital media art education",
+   "stratum": "random"
+  },
+  {
+   "item": 174,
+   "record_id": 547,
+   "doi": "10.18178/ijiet.2025.15.4.2284",
+   "title": "The Effect of Using MatGPT on Mathematical Proficiency among Undergraduate Students",
+   "stratum": "enriched"
+  },
+  {
+   "item": 175,
+   "record_id": 8132,
+   "doi": null,
+   "title": "PELATIHAN VERIFIKASI INFORMASI DAN PENCEGAHAN HALUSINASI ARTIFICIAL INTELLIGENCE (AI) BAGI MAHASISWA",
+   "stratum": "enriched"
+  },
+  {
+   "item": 176,
+   "record_id": 11824,
+   "doi": "10.1109/tale66047.2025.11346579",
+   "title": "Mechanisms for Enhancing Teachers\u2019 AI Competence Self-Efficacy: A Case Study of Generative AI-Supported Experiential Learning in Mainland China",
+   "stratum": "random"
+  },
+  {
+   "item": 177,
+   "record_id": 3403,
+   "doi": "10.20448/jeelr.v13i1.8231",
+   "title": "Balancing innovation and integrity in using generative AI for a new computer programming assignments approach",
+   "stratum": "enriched"
+  },
+  {
+   "item": 178,
+   "record_id": 5968,
+   "doi": "10.3390/mti10050052",
+   "title": "AI-Mediated Multimodal Learning and Its Impact on Sustainable Design Cognition: An Experimental Study with Interior Design Students",
+   "stratum": "enriched"
+  },
+  {
+   "item": 179,
+   "record_id": 14089,
+   "doi": "10.1145/3657604.3662032",
+   "title": "CodeTailor: LLM-Powered Personalized Parsons Puzzles for Engaging Support While Learning Programming",
+   "stratum": "enriched"
+  },
+  {
+   "item": 180,
+   "record_id": 7439,
+   "doi": "10.18178/ijiet.2025.15.11.2428",
+   "title": "Enhancing Scientific Literacy with an AI Powered Virtual Assistant: A Study Case",
+   "stratum": "enriched"
+  },
+  {
+   "item": 181,
+   "record_id": 10896,
+   "doi": "10.1109/weef-gedc66748.2025.11256373",
+   "title": "AI Agent to Prepare Students for Final Assessments: A Strategy to Strengthen and Maximize Student Performance in Engineering Programs",
+   "stratum": "enriched"
+  },
+  {
+   "item": 182,
+   "record_id": 5771,
+   "doi": "10.54513/joell.2026.13118",
+   "title": "DEVELOPING ENGLISH SPEAKING SKILLS THROUGH AI-ASSISTED PRONUNCIATION INSTRUCTION: A PILOT STUDY IN MULTILINGUAL INDIAN SECONDARY CLASSROOMS",
+   "stratum": "enriched"
+  },
+  {
+   "item": 183,
+   "record_id": 6669,
+   "doi": "10.26795/2307-1281-2026-14-3-5",
+   "title": "The relevance of the implementation of integration processes in education and their impact on the professional and pedagogical functions of teachers of engineering, technology and technical sciences",
+   "stratum": "random"
+  },
+  {
+   "item": 184,
+   "record_id": 1870,
+   "doi": "10.22373/ej.v12i2.29157",
+   "title": "Rethinking AI literacy: How high school students navigate ChatGPT in English language learning",
+   "stratum": "random"
+  },
+  {
+   "item": 185,
+   "record_id": 6945,
+   "doi": "10.51878/learning.v6i4.14694",
+   "title": "HUBUNGAN PERSEPSI PEMANFAATAN CHATGPT DENGAN PARTISIPASI BELAJAR DALAM PEMBELAJARAN SEJARAH",
+   "stratum": "random"
+  },
+  {
+   "item": 186,
+   "record_id": 9652,
+   "doi": null,
+   "title": "Leveraging ChatGPT for Higher Education Course Offerings",
+   "stratum": "random"
+  },
+  {
+   "item": 187,
+   "record_id": 7609,
+   "doi": "10.64753/jcasc.v10i4.3309",
+   "title": "Artificial Intelligence and the Human Mind: Academic Achievement, Ethical Practice, and Equity in Higher Education",
+   "stratum": "random"
+  },
+  {
+   "item": 188,
+   "record_id": 5182,
+   "doi": "10.33607/bjshs.v1i128.1341",
+   "title": "ChatGPT is a Breakthrough in Science and Education but Fails a Test in Sports and Exercise Psychology",
+   "stratum": "random"
+  },
+  {
+   "item": 189,
+   "record_id": 7848,
+   "doi": null,
+   "title": "\u041c\u0415\u0422\u041e\u0414\u0418\u0427\u041d\u0406 \u041f\u0406\u0414\u0425\u041e\u0414\u0418 \u0422\u0410 \u0414\u0418\u0414\u0410\u041a\u0422\u0418\u0427\u041d\u0406 \u041c\u041e\u0414\u0415\u041b\u0406 \u0412\u0418\u041a\u041e\u0420\u0418\u0421\u0422\u0410\u041d\u041d\u042f \u041c\u041e\u0411\u0406\u041b\u042c\u041d\u041e\u0413\u041e \u041d\u0410\u0412\u0427\u0410\u041d\u041d\u042f \u0412 \u0423\u041c\u041e\u0412\u0410\u0425 \u041a\u0420\u0418\u0417 \u0422\u0410 \u0420\u041e\u0417\u0412\u0418\u0422\u041a\u0423 \u0428\u0422\u0423\u0427\u041d\u041e\u0413\u041e \u0406\u041d\u0422\u0415\u041b\u0415\u041a\u0422\u0423",
+   "stratum": "random"
+  },
+  {
+   "item": 190,
+   "record_id": 5928,
+   "doi": "10.3390/nursrep16030087",
+   "title": "Educational Applications of AI-Based Chatbots in Nursing: A Scoping Review",
+   "stratum": "enriched"
+  },
+  {
+   "item": 191,
+   "record_id": 8349,
+   "doi": "10.65106/apubs.2025.2753",
+   "title": "Securing academic references with referencing source information",
+   "stratum": "random"
+  },
+  {
+   "item": 192,
+   "record_id": 10330,
+   "doi": "10.24963/ijcai.2024/1150",
+   "title": "Enhancing Automated Grading in Science Education through LLM-Driven Causal Reasoning and Multimodal Analysis",
+   "stratum": "random"
+  },
+  {
+   "item": 193,
+   "record_id": 3949,
+   "doi": "10.1109/access.2024.3445432",
+   "title": "Does ChatGPT Help Novice Programmers Write Better Code? Results From Static Code Analysis",
+   "stratum": "enriched"
+  },
+  {
+   "item": 194,
+   "record_id": 8527,
+   "doi": "10.59435/jimnu.v4i3.717",
+   "title": "Pengaruh Pemanfaatan AI Sebagai Tutor Virtual Terhadap Self-Efficacy Mahasiswa Pada Mata Kuliah Analisis Real",
+   "stratum": "enriched"
+  },
+  {
+   "item": 195,
+   "record_id": 5428,
+   "doi": "10.1080/02602938.2025.2502577",
+   "title": "Utilising one-on-one interactive oral assessments as the major final assessment within a bioscience course",
+   "stratum": "random"
+  },
+  {
+   "item": 196,
+   "record_id": 2384,
+   "doi": "10.3390/ai7080277",
+   "title": "Let\u2019s Code with GenAI: Exploring K-12 Teachers\u2019 Self-Efficacy, Value Beliefs, and Coding Performance",
+   "stratum": "enriched"
+  },
+  {
+   "item": 197,
+   "record_id": 13087,
+   "doi": "10.1145/3696630.3727244",
+   "title": "A Comparative Study on ChatGPT and Checklist as Support Tools for Unit Testing Education",
+   "stratum": "random"
+  },
+  {
+   "item": 198,
+   "record_id": 4943,
+   "doi": "10.32674/4kwhmf65",
+   "title": "Behavioral intention and actual use of ChatGPT in higher education",
+   "stratum": "random"
+  },
+  {
+   "item": 199,
+   "record_id": 7791,
+   "doi": "10.1016/j.ifacsc.2026.100422",
+   "title": "Enhancing control system education through simulation assisted teaching: Focussing on analogy and PID controller optimization",
+   "stratum": "random"
+  },
+  {
+   "item": 200,
+   "record_id": 413,
+   "doi": "10.37251/jber.v6i3.2096",
+   "title": "ChatGPT in STEM Classrooms: Students\u2019 Perceptions of Interest, Academic Proficiency, and Learning Independence",
+   "stratum": "random"
+  }
+ ]
+}
