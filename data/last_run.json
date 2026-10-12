@@ -1,30 +1,5 @@
 {
-  "openalex": {
-    "fetched": 2038,
-    "new": 86,
-    "duplicate": 1952,
-    "error": null
-  },
-  "eric": {
-    "fetched": 289,
-    "new": 0,
-    "duplicate": 289,
-    "error": null
-  },
-  "semantic_scholar": {
-    "fetched": 1000,
-    "new": 9,
-    "duplicate": 991,
-    "error": "RuntimeError: https://api.semanticscholar.org/graph/v1/paper/search/bulk kept failing after 5 tries (last status 429)"
-  },
-  "total_records": 14557,
-  "new_this_run": 95,
-  "versions": {
-    "superseded": 0,
-    "flagged_for_review": 0
-  },
-  "rules": {
-    "preprint or repository deposit, no published venue": 2,
-    "remaining_to_screen": 13429
-  }
+  "conference proceedings": 3028,
+  "poster or work in progress": 1,
+  "remaining_to_screen": 10400
 }
