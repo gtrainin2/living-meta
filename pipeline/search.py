@@ -296,7 +296,7 @@ def version_rank(doi, venue, pub_type):
     return 0
 
 
-def publication_type_rule(doi, venue, pub_type):
+def publication_type_rule(doi, venue, pub_type, title=None, known_journals=frozenset()):
     """Reason a record is ineligible on publication type alone, or None.
 
     This rule runs with no human or agent check, so it only fires on strong evidence. A preprint
@@ -312,14 +312,40 @@ def publication_type_rule(doi, venue, pub_type):
         return "preprint server record with no DOI"
     if "Dissertations/Theses" in pub_type:
         return "dissertation or thesis"
+    if is_proceedings(venue, pub_type, known_journals):
+        return "conference proceedings"
+    if POSTER_TITLE.match(title or ""):
+        return "poster or work in progress"
     return None
+
+
+# Conference proceedings are ineligible (protocol amendment, 2026-10-12).
+CONF_VENUE = re.compile(r"conference|proceedings|symposium|workshop|congress|colloquium|annual meeting|"
+                        r"chapter of the association for computational", re.I)
+JOURNAL_NAME = re.compile(r"journal|transactions|review|magazine|letters|quarterly|annals|bulletin", re.I)
+PROCEEDINGS_JOURNAL = re.compile(r"conference series|proceedings", re.I)
+YEAR_PREFIX = re.compile(r"^(19|20)\d\d\b")            # IEEE style: "2025 World Engineering Education Forum"
+POSTER_TITLE = re.compile(r"^\s*(poster|wip|work[- ]in[- ]progress|late[- ]breaking|extended abstract)\b\s*[:\-]", re.I)
+
+
+def is_proceedings(venue, pub_type, known_journals=frozenset()):
+    """Venue names decide first. Semantic Scholar's 'Conference' label alone counts only when the
+    venue never appears in OpenAlex as a journal, since that label is attached to some journals."""
+    venue, pub_type = venue or "", pub_type or ""
+    if JOURNAL_NAME.search(venue) and not PROCEEDINGS_JOURNAL.search(venue):
+        return False
+    if CONF_VENUE.search(venue) or YEAR_PREFIX.match(venue) or "Meeting Papers" in pub_type:
+        return True
+    return "Conference" in pub_type and venue.lower() not in known_journals
 
 
 def apply_rules(con):
     """Exclude records still at 'found' that fail the publication-type rule. Nothing is deleted."""
     out = {}
-    for r in con.execute("SELECT record_id, doi, venue, pub_type FROM records WHERE status='found'").fetchall():
-        reason = publication_type_rule(r["doi"], r["venue"], r["pub_type"])
+    journals = frozenset(v.lower() for (v,) in con.execute(
+        "SELECT DISTINCT venue FROM records WHERE pub_type='journal' AND venue IS NOT NULL"))
+    for r in con.execute("SELECT record_id, doi, venue, pub_type, title FROM records WHERE status='found'").fetchall():
+        reason = publication_type_rule(r["doi"], r["venue"], r["pub_type"], r["title"], journals)
         if reason:
             con.execute("UPDATE records SET status='excluded', exclusion_code='E10', decided_by=?, link_note=? "
                         "WHERE record_id=?", ("rule:publication_type", reason, r["record_id"]))

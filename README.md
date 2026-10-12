@@ -25,7 +25,7 @@ Records with the same title and first author but different DOIs are treated as v
 
 ## Exclusions made by rule
 
-Records are excluded without screening only on strong evidence of an ineligible publication type: a preprint-server or data-repository DOI with no published venue, a preprint-server record with no DOI, or a dissertation. They get `status = excluded`, `exclusion_code = E10`, and `decided_by = rule:publication_type`. A preprint DOI attached to a named journal or conference, and a repository copy with a publisher DOI or no DOI, are left for screening.
+Records are excluded without screening only on strong evidence of an ineligible publication type: a preprint-server or data-repository DOI with no published venue, a preprint-server record with no DOI, a dissertation, conference proceedings (venue name, an IEEE-style year prefix, an ERIC meeting-paper label, or a Semantic Scholar conference label on a venue never indexed as a journal), or a title that starts "Poster:" or "WIP:". They get `status = excluded`, `exclusion_code = E10`, and `decided_by = rule:publication_type`. A preprint DOI attached to a named journal or conference, and a repository copy with a publisher DOI or no DOI, are left for screening.
 
 To start a run by hand, put one word in `run-request.txt` (`counts`, `baseline`, `weekly`, `dedup`, or `rules`) and commit it.
 

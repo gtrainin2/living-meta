@@ -166,7 +166,7 @@ item,record_id,decision,exclusion_code,notes,coder,source
 165,7171,exclude,E3,,GT,"Google Sheet abstract_calibration, exported 2026-10-12"
 166,4031,exclude,E5,,GT,"Google Sheet abstract_calibration, exported 2026-10-12"
 167,9435,exclude,E2,,GT,"Google Sheet abstract_calibration, exported 2026-10-12"
-168,12747,,,,GT,"Google Sheet abstract_calibration, exported 2026-10-12"
+168,12747,exclude,E10,coded 2026-10-12 after proceedings amendment,GT,"Google Sheet abstract_calibration, exported 2026-10-12"
 169,6408,exclude,E2,,GT,"Google Sheet abstract_calibration, exported 2026-10-12"
 170,5811,include,,,GT,"Google Sheet abstract_calibration, exported 2026-10-12"
 171,9469,include,,,GT,"Google Sheet abstract_calibration, exported 2026-10-12"

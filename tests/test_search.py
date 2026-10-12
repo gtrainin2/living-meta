@@ -155,9 +155,20 @@ def test_publication_type_rule():
     assert rule("10.5281/zenodo.2", "Neliti", "repository")
     assert rule(None, "arXiv.org", "JournalArticle")
     assert rule(None, "ProQuest LLC", "Dissertations/Theses - Doctoral Dissertations")
-    # Kept for screening: weak or conflicting evidence.
-    assert rule("10.48550/arxiv.2506.09367", "Workshop on Innovative Use of NLP", "JournalArticle") is None
+    # A preprint DOI on a named workshop is not a preprint, but it is proceedings.
+    assert rule("10.48550/arxiv.2506.09367", "Workshop on Innovative Use of NLP", "JournalArticle") == "conference proceedings"
     assert rule("10.1145/3795867.3830978", "arXiv.org", "JournalArticle") is None
+    # Proceedings and posters (amendment 2026-10-12).
+    assert rule("10.1145/1", "Technical Symposium on Computer Science Education", "Book; JournalArticle") == "conference proceedings"
+    assert rule(None, "2025 World Engineering Education Forum - Global Engineering Deans Council", None) == "conference proceedings"
+    assert rule("10.3102/2198063", "AERA Online Paper Repository", "Speeches/Meeting Papers; Reports - Research") == "conference proceedings"
+    assert rule("10.18653/v1/x", "Annual Meeting of the Association for Computational Linguistics", "JournalArticle; Conference") == "conference proceedings"
+    assert rule("10.1088/1742-6596/1", "Journal of Physics, Conference Series", "JournalArticle; Conference") == "conference proceedings"
+    assert rule("10.1/x", "Journal of The Colloquium for Information Systems Security Education", "journal") is None
+    assert rule("10.1016/x", "Informatics", "JournalArticle; Conference", None, {"informatics"}) is None
+    assert rule("10.1109/x", "Information Technology Trends", "Conference", None, {"informatics"}) == "conference proceedings"
+    assert rule("10.1/x", "New Vistas", "journal", "Poster: Adaptive AI tutors in extended reality") == "poster or work in progress"
+    assert rule("10.1/x", "New Vistas", "journal", "Posters and learning: a study") is None
     assert rule("10.2478/rem-2025-0012", "DOAJ (DOAJ: Directory of Open Access Journals)", "repository") is None
     assert rule(None, "UKnowledge (University of Kentucky)", "repository") is None
     assert rule("10.1108/dlp-05-2025-206", "Digital Library Perspectives", "journal") is None
