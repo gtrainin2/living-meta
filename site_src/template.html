@@ -1,0 +1,247 @@
+<title>Generative AI and STEM Learning</title>
+<meta name="description" content="A living meta-analysis of experimental studies on generative AI and STEM learning, updated weekly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column for a lab notebook, ledger tables and a PRISMA flow at full column width */
+:root {
+  --bg: #F3F5F4; --surface: #FFFFFF; --ink: #16212A; --muted: #56636D; --rule: #D3DBD9;
+  --accent: #1D5E86; --accent-soft: #E1ECF3;
+  --unsure: #95600F; --unsure-soft: #F6EBD8; --done: #2C7350; --done-soft: #DDEFE5;
+  --display: "Spectral", Georgia, "Times New Roman", serif;
+  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10171C; --surface: #172129; --ink: #E2E9EC; --muted: #96A4AE; --rule: #2A3741;
+  --accent: #74B4DD; --accent-soft: #1B3142; --unsure: #DDA752; --unsure-soft: #3A2D17; --done: #72C49D; --done-soft: #183427;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #10171C; --surface: #172129; --ink: #E2E9EC; --muted: #96A4AE; --rule: #2A3741;
+  --accent: #74B4DD; --accent-soft: #1B3142; --unsure: #DDA752; --unsure-soft: #3A2D17; --done: #72C49D; --done-soft: #183427;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--body); margin: 0; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 64px; display: grid; gap: 56px; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.08; max-width: 18ch; }
+h2 { font-size: 1.6rem; line-height: 1.2; }
+p { margin: 0; }
+.eyebrow { font: 500 0.75rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 1.12rem; color: var(--muted); max-width: 62ch; }
+.num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+section { display: grid; gap: 20px; min-width: 0; }
+.sec-head { display: grid; gap: 8px; border-top: 1px solid var(--ink); padding-top: 14px; }
+.sec-head p { color: var(--muted); max-width: 65ch; }
+
+/* Header */
+header { display: grid; gap: 22px; }
+nav { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.92rem; }
+.ledger { display: flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--rule); background: var(--surface); border-radius: 4px; }
+.ledger div { flex: 1 1 150px; padding: 14px 18px; border-right: 1px solid var(--rule); display: grid; gap: 2px; }
+.ledger div:last-child { border-right: 0; }
+.ledger b { font: 500 1.7rem/1.1 var(--mono); font-variant-numeric: tabular-nums; }
+.ledger span { font-size: 0.85rem; color: var(--muted); }
+.ledger .pending b { color: var(--muted); }
+.banner { background: var(--accent-soft); border-radius: 4px; padding: 14px 18px; max-width: 75ch; }
+
+/* Stages */
+.stages { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 28px; }
+.stage { display: grid; grid-template-columns: 14px 1fr; gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--rule); }
+.stage p { color: var(--muted); font-size: 0.92rem; }
+.stage-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline; }
+.dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 7px; border: 2px solid var(--muted); }
+.stage.done .dot { background: var(--done); border-color: var(--done); }
+.stage.active .dot { background: var(--surface); border-color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+.pill { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 7px; border-radius: 3px; white-space: nowrap; }
+.pill.done, .pill.include { background: var(--done-soft); color: var(--done); }
+.pill.active { background: var(--accent-soft); color: var(--accent); }
+.pill.todo { background: transparent; color: var(--muted); border: 1px solid var(--rule); }
+.pill.unsure { background: var(--unsure-soft); color: var(--unsure); }
+.pill.new { background: var(--accent); color: var(--surface); }
+
+/* PRISMA */
+.scroll { overflow-x: auto; min-width: 0; }
+.prisma { width: 100%; min-width: 640px; height: auto; display: block; }
+.prisma .box { fill: var(--surface); stroke: var(--ink); stroke-width: 1; }
+.prisma .side { stroke: var(--rule); }
+.prisma .pending { stroke-dasharray: 4 3; stroke: var(--muted); }
+.prisma .arrow { stroke: var(--muted); stroke-width: 1.2; }
+.prisma .arrowhead { fill: var(--muted); }
+.prisma .t-head { font: 600 14px var(--body); fill: var(--ink); }
+.prisma .t-sub { font: 400 12.5px var(--mono); fill: var(--muted); }
+.prisma .t-stage { font: 500 10.5px var(--mono); letter-spacing: 0.12em; fill: var(--muted); }
+
+/* Exclusion bars */
+.bars { display: grid; gap: 8px; }
+.bar-row { display: grid; grid-template-columns: 3.2em minmax(0, 15em) minmax(60px, 1fr) 6.5em; gap: 12px; align-items: center; font-size: 0.92rem; }
+.bar-code { font-family: var(--mono); color: var(--muted); }
+.bar-track { height: 10px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+.bar { display: block; height: 100%; background: var(--accent); }
+.bar-n { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.bar-n small { color: var(--muted); }
+@media (max-width: 600px) { .bar-row { grid-template-columns: 3em minmax(0,1fr) 5.5em; } .bar-track { grid-column: 2 / 4; grid-row: 2; } }
+
+/* Candidates */
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.controls input[type=search] { flex: 1 1 240px; min-width: 0; font: inherit; padding: 9px 12px; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); color: var(--ink); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.seg button { font: 500 0.85rem var(--body); border: 0; background: var(--surface); color: var(--ink); padding: 9px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.count { font-size: 0.88rem; color: var(--muted); }
+.studies { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.study { padding-block: 14px; border-bottom: 1px solid var(--rule); display: grid; gap: 4px; }
+.study-top { display: flex; gap: 10px; justify-content: space-between; align-items: start; }
+.study-title { font-weight: 600; line-height: 1.4; min-width: 0; overflow-wrap: anywhere; }
+.study-title a { color: var(--ink); text-decoration-color: var(--rule); }
+.study-title a:hover { text-decoration-color: var(--accent); }
+.study-meta { font-size: 0.88rem; color: var(--muted); }
+.study details summary { font-size: 0.84rem; color: var(--accent); cursor: pointer; width: fit-content; }
+.study details p { font-size: 0.9rem; color: var(--muted); margin-top: 6px; max-width: 75ch; }
+.tags { display: flex; gap: 6px; flex-shrink: 0; }
+.more { justify-self: start; font: 500 0.9rem var(--body); padding: 9px 16px; border: 1px solid var(--ink); background: transparent; color: var(--ink); border-radius: 4px; cursor: pointer; }
+.empty { padding: 20px 0; color: var(--muted); }
+
+/* Tables */
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--rule); }
+thead th { font: 500 0.72rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-bottom-color: var(--ink); }
+td.num, th.num { text-align: right; }
+.mode { font-family: var(--mono); font-size: 0.82rem; }
+.fetched { color: var(--muted); font-family: var(--mono); font-size: 0.8rem; }
+.err { color: var(--unsure); margin-top: 3px; font-family: var(--body); }
+.runs { min-width: 620px; }
+.crit { min-width: 640px; }
+.crit th[scope=row] { font-weight: 600; white-space: nowrap; }
+.crit td { color: var(--muted); }
+
+/* Methods */
+.cal { display: flex; flex-wrap: wrap; gap: 14px 40px; }
+.cal div { display: grid; gap: 4px; }
+.cal-n { font: 500 1.6rem/1 var(--mono); }
+.cal-l { font-size: 0.86rem; color: var(--muted); }
+.note { font-size: 0.9rem; color: var(--muted); max-width: 70ch; }
+h3 { font: 600 1.05rem var(--body); margin: 0; }
+footer { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 0.88rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 24px; }
+@media (prefers-reduced-motion: no-preference) { .bar { transition: width .4s ease; } }
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">Living meta-analysis · updated weekly · last update {{UPDATED}}</p>
+  <h1>Generative AI and STEM Learning</h1>
+  <p class="lede">What happens to students' learning in science, mathematics, engineering and computing when they work with generative AI, compared with students who don't? This review tracks every experimental and quasi-experimental study published since January 2023, and re-runs the search each Monday.</p>
+  <div class="ledger" aria-label="Current totals">
+    <div><b>{{RECORDS}}</b><span>records found</span></div>
+    <div><b>{{CANDIDATES}}</b><span>passed abstract screening</span></div>
+    <div><b>{{INCLUDE}}</b><span>likely eligible</span></div>
+    <div class="pending"><b>{{ANALYSED}}</b><span>in the pooled analysis</span></div>
+  </div>
+  <p class="banner">No pooled effect size yet. Full-text review starts once a person has audited the AI screener's abstract decisions. The forest plot and moderator results will appear here when the first studies are coded.</p>
+  <nav aria-label="Sections"><a href="#progress">Progress</a><a href="#flow">Study flow</a><a href="#studies">Candidate studies</a><a href="#updates">Weekly updates</a><a href="#methods">Methods</a></nav>
+</header>
+
+<section id="progress">
+  <div class="sec-head"><p class="eyebrow">Pipeline</p><h2>Where the review stands</h2></div>
+  <ol class="stages">{{STAGES}}</ol>
+</section>
+
+<section id="flow">
+  <div class="sec-head"><p class="eyebrow">PRISMA 2020</p><h2>Study flow</h2>
+    <p>Each record moves through the same stages. Counts update automatically after every search and screening run.</p></div>
+  <div class="scroll">{{PRISMA}}</div>
+  <h3>Why records were excluded</h3>
+  <div class="bars">{{CODES}}</div>
+  <p class="note">A record gets the first code that applies, in protocol order. Most E10 exclusions were made by rule (preprints, conference proceedings, dissertations) before any screening.</p>
+</section>
+
+<section id="studies">
+  <div class="sec-head"><p class="eyebrow">Candidates</p><h2>Studies headed for full-text review</h2>
+    <p>These records passed abstract screening. They are candidates, not included studies: each still needs a full-text check against every criterion.</p></div>
+  <div class="controls">
+    <input id="q" type="search" aria-label="Search titles, authors and journals" placeholder="Search titles, authors, journals" autocomplete="off">
+    <div class="seg" role="group" aria-label="Screening result">
+      <button type="button" data-f="all" aria-pressed="true">All</button>
+      <button type="button" data-f="include" aria-pressed="false">Likely eligible</button>
+      <button type="button" data-f="unsure" aria-pressed="false">Unsure</button>
+      <button type="button" data-f="new" aria-pressed="false">New this week ({{NEW_THIS_WEEK}})</button>
+    </div>
+  </div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <ul class="studies" id="list"></ul>
+  <button type="button" class="more" id="more">Show more</button>
+</section>
+
+<section id="updates">
+  <div class="sec-head"><p class="eyebrow">Change log</p><h2>Weekly updates</h2>
+    <p>Every Monday the search re-queries the last 120 days of publications in OpenAlex, ERIC and Semantic Scholar. New records are deduplicated against everything already found.</p></div>
+  <h3>Search runs</h3>
+  <div class="scroll"><table class="runs"><thead><tr><th>Date</th><th>Run</th><th>Window from</th><th class="num">New records</th><th>Records returned per source</th></tr></thead><tbody>{{RUNS}}</tbody></table></div>
+  <h3>Screening batches</h3>
+  <div class="scroll"><table class="runs"><thead><tr><th>Applied</th><th>Prompt</th><th class="num">Records</th><th class="num">Include</th><th class="num">Unsure</th><th class="num">Exclude</th><th>State</th></tr></thead><tbody>{{BATCHES}}</tbody></table></div>
+</section>
+
+<section id="methods">
+  <div class="sec-head"><p class="eyebrow">Protocol</p><h2>Methods</h2>
+    <p>Eligibility criteria as amended {{AMENDED}}. A study must meet every row.</p></div>
+  <div class="scroll"><table class="crit"><thead><tr><th>Criterion</th><th>Include</th><th>Exclude</th></tr></thead><tbody>{{CRITERIA}}</tbody></table></div>
+  <h3>Screener calibration</h3>
+  <p class="note">Before screening the full set, the AI screener was checked against records coded independently by people and adjudicated.</p>
+  {{CALIB}}
+</section>
+
+<footer>
+  <span>Data, code and every screening decision: <a href="{{REPO}}">github.com/gtrainin2/living-meta</a></span>
+  <span>Guy Trainin, University of Nebraska–Lincoln</span>
+</footer>
+</div>
+
+<script type="application/json" id="data">{{DATA}}</script>
+<script>
+(function () {
+  var rows = JSON.parse(document.getElementById("data").textContent);
+  var list = document.getElementById("list"), q = document.getElementById("q"),
+      more = document.getElementById("more"), count = document.getElementById("count");
+  var filter = "all", shown = 40, STEP = 40;
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function match(r, term) {
+    if (filter === "include" && r.s !== "include") return false;
+    if (filter === "unsure" && r.s !== "unsure") return false;
+    if (filter === "new" && !r.n) return false;
+    if (!term) return true;
+    return (r.t + " " + r.a + " " + r.v + " " + (r.y || "")).toLowerCase().indexOf(term) !== -1;
+  }
+  function draw() {
+    var term = q.value.trim().toLowerCase();
+    var hits = rows.filter(function (r) { return match(r, term); });
+    var page = hits.slice(0, shown);
+    list.innerHTML = page.length ? page.map(function (r) {
+      var title = r.u ? '<a href="' + esc(r.u) + '" target="_blank" rel="noopener">' + esc(r.t) + "</a>" : esc(r.t);
+      var meta = [r.a, r.y, r.v].filter(Boolean).map(esc).join(" · ");
+      return '<li class="study"><div class="study-top"><div class="study-title">' + title + '</div><div class="tags">' +
+        (r.n ? '<span class="pill new">New</span>' : "") +
+        '<span class="pill ' + r.s + '">' + (r.s === "include" ? "Likely eligible" : "Unsure") + "</span></div></div>" +
+        '<div class="study-meta">' + meta + "</div>" +
+        (r.why ? "<details><summary>Screener's reasoning</summary><p>" + esc(r.why) + "</p></details>" : "") + "</li>";
+    }).join("") : '<li class="empty">No candidate studies match this search.</li>';
+    count.textContent = "Showing " + page.length.toLocaleString() + " of " + hits.length.toLocaleString() + " candidates";
+    more.hidden = hits.length <= shown;
+  }
+  q.addEventListener("input", function () { shown = STEP; draw(); });
+  more.addEventListener("click", function () { shown += STEP; draw(); });
+  document.querySelectorAll(".seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      filter = b.getAttribute("data-f"); shown = STEP;
+      document.querySelectorAll(".seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      draw();
+    });
+  });
+  draw();
+})();
+</script>
