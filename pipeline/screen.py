@@ -44,6 +44,8 @@ def call_model(prompt, model, key, tries=6):
         if r.status_code in (429, 500, 502, 503, 529):
             time.sleep(min(60, 3 * 2 ** i))
             continue
+        if r.status_code in (401, 403):
+            raise RuntimeError(f"HTTP {r.status_code}: the API rejected the key")
         if r.status_code != 200:
             raise RuntimeError(f"HTTP {r.status_code}: {r.text[:300]}")
         js = r.json()
@@ -140,9 +142,16 @@ def score(rows, codes):
 
 
 def calibrate(models, workers=4, call=call_model, db_path=ROOT / "data" / "records.sqlite"):
-    key = os.environ.get("ANTHROPIC_API_KEY", "")
-    if not key and call is call_model:
-        raise SystemExit("ANTHROPIC_API_KEY is not set")
+    key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+    if call is call_model:
+        if not key:
+            raise SystemExit("ANTHROPIC_API_KEY is not set")
+        if not key.startswith("sk-ant-"):
+            raise SystemExit("ANTHROPIC_API_KEY does not look like an Anthropic key (it should start with sk-ant-)")
+        try:                                   # one cheap call first, so a bad key fails before hundreds of calls
+            call_model("Reply with the word ok.", models[0], key)
+        except RuntimeError as e:
+            raise SystemExit(f"Key check failed: {e}")
     con = db.connect(db_path)
     recs, codes = calibration_records(con)
     report = {"prompt_version": PROMPT_VERSION, "records_screened": len(recs),
