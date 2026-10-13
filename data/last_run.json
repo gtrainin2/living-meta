@@ -1,0 +1,58 @@
+{
+  "claude-sonnet-5-5": {
+    "records_scored": 0,
+    "human_includes": 0,
+    "human_excludes": 0,
+    "errors": 162,
+    "table": {
+      "pass_inc": 0,
+      "fail_inc": 0,
+      "pass_exc": 0,
+      "fail_exc": 0
+    },
+    "sensitivity": null,
+    "sensitivity_95ci": null,
+    "specificity": null,
+    "specificity_95ci": null,
+    "kappa_pass_vs_exclude": null,
+    "exclusion_code_agreement": null,
+    "decisions": {
+      "include": 0,
+      "unsure": 0,
+      "exclude": 0
+    },
+    "quotes_verified": "0/0",
+    "tokens": {
+      "input_tokens": 0,
+      "output_tokens": 0
+    }
+  },
+  "claude-haiku-5-5": {
+    "records_scored": 0,
+    "human_includes": 0,
+    "human_excludes": 0,
+    "errors": 162,
+    "table": {
+      "pass_inc": 0,
+      "fail_inc": 0,
+      "pass_exc": 0,
+      "fail_exc": 0
+    },
+    "sensitivity": null,
+    "sensitivity_95ci": null,
+    "specificity": null,
+    "specificity_95ci": null,
+    "kappa_pass_vs_exclude": null,
+    "exclusion_code_agreement": null,
+    "decisions": {
+      "include": 0,
+      "unsure": 0,
+      "exclude": 0
+    },
+    "quotes_verified": "0/0",
+    "tokens": {
+      "input_tokens": 0,
+      "output_tokens": 0
+    }
+  }
+}
