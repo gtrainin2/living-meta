@@ -1,16 +1,20 @@
 name: Weekly search
 on:
   schedule:
-    - cron: "17 11 * * 1"      # Mondays, about 6:17 am Central
+    - cron: "17 11 * * 1"      # Mondays, about 6:17 am Central: weekly search
+    - cron: "37 * * * *"       # hourly: collect finished screening batches
   push:
     paths: ["run-request.txt"]   # committing a mode to this file starts a run
   workflow_dispatch:
     inputs:
       mode:
-        description: "counts, baseline, weekly, dedup, or rules"
+        description: "counts, baseline, weekly, dedup, rules, calibrate, submit, or poll"
         default: weekly
 permissions:
   contents: write
+concurrency:
+  group: pipeline
+  cancel-in-progress: false
 jobs:
   search:
     runs-on: ubuntu-latest
@@ -29,10 +33,13 @@ jobs:
         run: |
           MODE="${{ inputs.mode }}"
           if [ -z "$MODE" ] && [ "${{ github.event_name }}" = "push" ]; then MODE="$(head -n1 run-request.txt | tr -d '[:space:]')"; fi
-          case "$MODE" in counts|baseline|weekly|dedup|rules|calibrate) ;; *) MODE=weekly ;; esac
+          if [ "${{ github.event.schedule }}" = "37 * * * *" ]; then MODE=poll; fi
+          case "$MODE" in counts|baseline|weekly|dedup|rules|calibrate|submit|poll) ;; *) MODE=weekly ;; esac
           echo "mode: $MODE"
           if [ "$MODE" = calibrate ]; then
             python -m pipeline.screen calibrate 2> data/last_run.err | tee data/last_run.json
+          elif [ "$MODE" = submit ] || [ "$MODE" = poll ]; then
+            python -m pipeline.batch "$MODE" 2> data/last_run.err | tee data/last_run.json
           else
             python -m pipeline.search "$MODE" 2> data/last_run.err | tee data/last_run.json
           fi

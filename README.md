@@ -27,7 +27,7 @@ Records with the same title and first author but different DOIs are treated as v
 
 Records are excluded without screening only on strong evidence of an ineligible publication type: a preprint-server or data-repository DOI with no published venue, a preprint-server record with no DOI, a dissertation, conference proceedings (venue name, an IEEE-style year prefix, an ERIC meeting-paper label, or a Semantic Scholar conference label on a venue never indexed as a journal), or a title that starts "Poster:" or "WIP:". They get `status = excluded`, `exclusion_code = E10`, and `decided_by = rule:publication_type`. A preprint DOI attached to a named journal or conference, and a repository copy with a publisher DOI or no DOI, are left for screening.
 
-To start a run by hand, put one word in `run-request.txt` (`counts`, `baseline`, `weekly`, `dedup`, or `rules`) and commit it.
+To start a run by hand, put one word in `run-request.txt` (`counts`, `baseline`, `weekly`, `dedup`, `rules`, `calibrate`, `submit`, or `poll`) and commit it.
 
 ## Where it differs from the protocol text
 
@@ -39,3 +39,9 @@ To start a run by hand, put one word in `run-request.txt` (`counts`, `baseline`,
 ## Not yet verified
 
 The three API clients were written from the public documentation and tested against fixture responses only. The first live `counts` run is the real test of the query syntax.
+
+## Abstract screening
+
+`python -m pipeline.batch submit` sends every record at `status = found` to the screener (prompt `prompts/screener.md`, model Claude Haiku 5.5) through the Message Batches API, in batches of 5,000. An hourly job runs `poll`, which applies finished batches: include becomes `abstract_include`, unsure becomes `abstract_unsure`, exclude becomes `excluded` with the screener's code. Failed requests return to `found`. Every decision is logged in `data/screening/abstract_decisions-*.jsonl`. Excludes with an unverified quote or no code, a 10% random sample of excludes, and any suspected prompt injection go to `data/screening/review_queue.csv` for a person.
+
+Calibration against 162 human-coded records (adjudicated): sensitivity 25/25, specificity .83. See `data/calibration/screener_report.json`.

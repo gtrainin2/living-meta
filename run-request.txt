@@ -1,2 +1,2 @@
-calibrate
-requested 2026-10-12 22:15 Haiku, prompt 0.3, adjudicated reference
+submit
+requested 2026-10-12 22:25 baseline abstract screening via batches
