@@ -1,0 +1,32 @@
+[
+ {
+  "id": "msgbatch_01QyWEhkgJ2QftWYefmsSi2P",
+  "created": "2026-10-13T03:22:00+00:00",
+  "model": "claude-haiku-5-5",
+  "prompt_version": "screener-0.3",
+  "n": 5000,
+  "first_record": 1,
+  "last_record": 5242,
+  "state": "submitted"
+ },
+ {
+  "id": "msgbatch_016M1iyMq7LjbYbUPFMGGHLd",
+  "created": "2026-10-13T03:22:05+00:00",
+  "model": "claude-haiku-5-5",
+  "prompt_version": "screener-0.3",
+  "n": 5000,
+  "first_record": 5243,
+  "last_record": 12951,
+  "state": "submitted"
+ },
+ {
+  "id": "msgbatch_01QpN9mm47GZZQEa6idiKfBS",
+  "created": "2026-10-13T03:22:07+00:00",
+  "model": "claude-haiku-5-5",
+  "prompt_version": "screener-0.3",
+  "n": 400,
+  "first_record": 12954,
+  "last_record": 14556,
+  "state": "submitted"
+ }
+]
