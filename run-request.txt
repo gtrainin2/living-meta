@@ -1,2 +1,2 @@
 calibrate
-requested 2026-10-12 22:01 screener calibration, no temperature
+requested 2026-10-12 22:15 Haiku, prompt 0.3, adjudicated reference

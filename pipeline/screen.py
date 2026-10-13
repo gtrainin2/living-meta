@@ -1,6 +1,6 @@
 """Stage 2, title and abstract screening with the screener prompt.
 
-    python -m pipeline.screen calibrate [--models claude-sonnet-5-5,claude-haiku-5-5]
+    python -m pipeline.screen calibrate [--models claude-haiku-5-5]
 
 calibrate runs the screener on the calibration records that survive the publication-type rules,
 writes every decision to data/calibration/screener_<model>.jsonl, and writes the agreement with
@@ -21,24 +21,58 @@ from . import db
 
 ROOT = Path(__file__).resolve().parent.parent
 CAL = ROOT / "data" / "calibration"
-PROMPT_VERSION = "screener-0.2"
+PROMPT_VERSION = "screener-0.3"
 API = "https://api.anthropic.com/v1/messages"
 
 
+CODES = ["E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10"]
+LEVEL = {"type": "string", "enum": ["met", "not_met", "unclear"]}
+TOOL = {
+    "name": "record_decision",
+    "description": "Record the screening decision for this record.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "record_id": {"type": "string"},
+            "stage": {"type": "string", "enum": ["abstract", "fulltext"]},
+            "decision": {"type": "string", "enum": ["include", "exclude", "unsure"]},
+            "exclusion_code": {"type": ["string", "null"], "enum": CODES + [None]},
+            "criteria": {"type": "object", "properties": {k: LEVEL for k in
+                         ("intervention", "comparison", "design", "population", "domain", "outcome")}},
+            "quote": {"type": ["string", "null"]},
+            "quote_location": {"type": ["string", "null"]},
+            "rationale": {"type": "string"},
+            "possible_duplicate_of": {"type": ["string", "null"]},
+            "injection_suspected": {"type": "boolean"},
+        },
+        "required": ["decision", "exclusion_code", "criteria", "quote", "rationale", "injection_suspected"],
+    },
+}
+
+
 def build_prompt(rec, stage="abstract"):
+    """Returns (fixed instructions, record message). The fixed part is identical for every record."""
     tmpl = (ROOT / "prompts" / "screener.md").read_text(encoding="utf-8").split("-->", 1)[1].lstrip()
     elig = (ROOT / "prompts" / "eligibility.md").read_text(encoding="utf-8")
+    fixed, record = tmpl.split("=====RECORD=====")
     body = (f"Title: {rec['title']}\nVenue: {rec['venue'] or 'not given'}\nYear: {rec['year'] or 'not given'}\n"
             f"Abstract: {rec['abstract'] or '[no abstract in the index]'}")
-    return (tmpl.replace("{{eligibility_table_and_exclusion_codes}}", elig).replace("{{stage}}", stage)
-            .replace("{{record_id}}", str(rec["record_id"])).replace("{{record}}", body))
+    fixed = fixed.replace("{{eligibility_table_and_exclusion_codes}}", elig).strip()
+    record = (record.replace("{{stage}}", stage).replace("{{record_id}}", str(rec["record_id"]))
+              .replace("{{record}}", body).strip())
+    return fixed, record
 
 
 def call_model(prompt, model, key, tries=6):
     import requests
+    fixed, record = prompt if isinstance(prompt, tuple) else ("", prompt)
     headers = {"x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"}
     payload = {"model": model, "max_tokens": 1200,
-               "messages": [{"role": "user", "content": prompt}]}
+               "messages": [{"role": "user", "content": record}]}
+    if fixed:
+        payload["system"] = [{"type": "text", "text": fixed, "cache_control": {"type": "ephemeral"}}]
+        payload["tools"] = [TOOL]
+        payload["tool_choice"] = {"type": "tool", "name": "record_decision"}
     for i in range(tries):
         r = requests.post(API, headers=headers, json=payload, timeout=120)
         if r.status_code in (429, 500, 502, 503, 529):
@@ -49,15 +83,21 @@ def call_model(prompt, model, key, tries=6):
         if r.status_code != 200:
             raise RuntimeError(f"HTTP {r.status_code}: {r.text[:300]}")
         js = r.json()
+        for b in js["content"]:
+            if b.get("type") == "tool_use":
+                return b["input"], js.get("usage", {})
         return "".join(b.get("text", "") for b in js["content"]), js.get("usage", {})
     raise RuntimeError(f"gave up after {tries} tries, last HTTP {r.status_code}")
 
 
-def parse(text):
-    m = re.search(r"\{.*\}", text, re.S)
-    if not m:
-        raise ValueError("no JSON object in reply")
-    out = json.loads(m.group(0))
+def parse(reply):
+    if isinstance(reply, dict):
+        out = reply
+    else:
+        m = re.search(r"\{.*\}", reply, re.S)
+        if not m:
+            raise ValueError("no JSON object in reply")
+        out = json.loads(m.group(0))
     if out.get("decision") not in ("include", "exclude", "unsure"):
         raise ValueError(f"bad decision {out.get('decision')!r}")
     return out
@@ -75,7 +115,7 @@ def screen_one(rec, model, key, call=call_model):
             text, usage = call(prompt, model, key)
             out = parse(text)
             row.update(out, record_id=rec["record_id"], usage=usage, error=None)
-            source = norm(f"{rec['title']} {rec['abstract'] or ''}")
+            source = norm(f"{rec['title']} {rec['venue'] or ''} {rec['abstract'] or ''}")
             row["quote_verified"] = bool(out.get("quote")) and norm(out["quote"]) in source
             return row
         except Exception as e:  # malformed reply gets one retry, then goes to human review
@@ -84,7 +124,8 @@ def screen_one(rec, model, key, call=call_model):
 
 
 def calibration_records(con):
-    codes = {int(r["record_id"]): r for r in csv.DictReader(open(CAL / "abstract_human_codes.csv"))}
+    ref = CAL / "abstract_reference_codes.csv"          # human codes after PI adjudication
+    codes = {int(r["record_id"]): r for r in csv.DictReader(open(ref if ref.exists() else CAL / "abstract_human_codes.csv"))}
     ids = ",".join(map(str, codes))
     recs = con.execute(f"SELECT record_id, title, abstract, venue, year, status FROM records "
                        f"WHERE record_id IN ({ids})").fetchall()
@@ -149,7 +190,7 @@ def calibrate(models, workers=4, call=call_model, db_path=ROOT / "data" / "recor
         if not key.startswith("sk-ant-"):
             raise SystemExit("ANTHROPIC_API_KEY does not look like an Anthropic key (it should start with sk-ant-)")
         try:                                   # one cheap call first, so a bad key fails before hundreds of calls
-            call_model("Reply with the word ok.", models[0], key)
+            call_model(("", "Reply with the word ok."), models[0], key)
         except RuntimeError as e:
             raise SystemExit(f"Key check failed: {e}")
     con = db.connect(db_path)
@@ -163,8 +204,9 @@ def calibrate(models, workers=4, call=call_model, db_path=ROOT / "data" / "recor
             for r in sorted(rows, key=lambda r: r["record_id"]):
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
         rep = score(rows, codes)
-        rep["tokens"] = {k: sum((r.get("usage") or {}).get(k, 0) for r in rows)
-                         for k in ("input_tokens", "output_tokens")}
+        rep["tokens"] = {k: sum((r.get("usage") or {}).get(k) or 0 for r in rows)
+                         for k in ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens",
+                                   "output_tokens")}
         report["models"][model] = rep
     (CAL / "screener_report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False))
     return report
@@ -173,7 +215,7 @@ def calibrate(models, workers=4, call=call_model, db_path=ROOT / "data" / "recor
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("mode", choices=["calibrate"])
-    ap.add_argument("--models", default="claude-sonnet-5-5,claude-haiku-5-5")
+    ap.add_argument("--models", default="claude-haiku-5-5")
     args = ap.parse_args(argv)
     rep = calibrate([m.strip() for m in args.models.split(",") if m.strip()])
     print(json.dumps({m: {k: v for k, v in r.items() if k != "missed_human_includes"}
