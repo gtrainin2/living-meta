@@ -37,7 +37,7 @@ def build_prompt(rec, stage="abstract"):
 def call_model(prompt, model, key, tries=6):
     import requests
     headers = {"x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"}
-    payload = {"model": model, "max_tokens": 1200, "temperature": 0,
+    payload = {"model": model, "max_tokens": 1200,
                "messages": [{"role": "user", "content": prompt}]}
     for i in range(tries):
         r = requests.post(API, headers=headers, json=payload, timeout=120)

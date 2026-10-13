@@ -1,2 +1,2 @@
 calibrate
-requested 2026-10-12 21:59 screener calibration, new key
+requested 2026-10-12 22:01 screener calibration, no temperature
