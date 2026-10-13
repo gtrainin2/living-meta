@@ -1,29 +1,3 @@
 {
-  "msgbatch_01QyWEhkgJ2QftWYefmsSi2P": {
-    "include": 215,
-    "unsure": 598,
-    "exclude": 4187,
-    "failed": 0,
-    "to_review": 789
-  },
-  "msgbatch_016M1iyMq7LjbYbUPFMGGHLd": {
-    "include": 77,
-    "unsure": 376,
-    "exclude": 4547,
-    "failed": 0,
-    "to_review": 898
-  },
-  "msgbatch_01QpN9mm47GZZQEa6idiKfBS": {
-    "include": 8,
-    "unsure": 56,
-    "exclude": 336,
-    "failed": 0,
-    "to_review": 63
-  },
-  "status_counts": {
-    "abstract_include": 300,
-    "abstract_unsure": 1030,
-    "excluded": 13138,
-    "superseded": 89
-  }
+  "open_batches": 0
 }
