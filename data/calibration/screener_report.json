@@ -1,133 +1,43 @@
 {
-  "prompt_version": "screener-0.2",
+  "prompt_version": "screener-0.3",
   "records_screened": 162,
   "note": "calibration records excluded by the publication-type rule are not screened",
   "models": {
-    "claude-sonnet-5-5": {
-      "records_scored": 160,
-      "human_includes": 30,
-      "human_excludes": 130,
-      "errors": 2,
-      "table": {
-        "pass_inc": 24,
-        "fail_inc": 6,
-        "pass_exc": 11,
-        "fail_exc": 119
-      },
-      "sensitivity": 0.8,
-      "sensitivity_95ci": [
-        0.627,
-        0.905
-      ],
-      "specificity": 0.915,
-      "specificity_95ci": [
-        0.855,
-        0.952
-      ],
-      "kappa_pass_vs_exclude": 0.672,
-      "exclusion_code_agreement": 0.37,
-      "decisions": {
-        "include": 21,
-        "unsure": 14,
-        "exclude": 125
-      },
-      "quotes_verified": "155/160",
-      "missed_human_includes": [
-        {
-          "record_id": 1609,
-          "screener_code": "E5",
-          "rationale": "The study meets the other criteria: learner-facing Gemini, a nonequivalent control group, university students, and a programming course. However, every outcome is framed as perceived AI literacy (self-reported scale sub-factors), so the abstract gives positive evidence of a perception-only outcome and no quantitative measure of learning."
-        },
-        {
-          "record_id": 3403,
-          "screener_code": "E3",
-          "rationale": "Both groups used generative AI: the experimental group followed a structured GenAI approach and the control group used GenAI without restrictions. The protocol excludes studies that only compare two generative AI variants, and there is no non-GenAI control group."
-        },
-        {
-          "record_id": 3501,
-          "screener_code": "E3",
-          "rationale": "Both conditions use GPT (Socratic vs. direct-answer variants) and no group is described without generative AI, so the comparison fails under the protocol's rule against studies comparing only two generative AI variants. The outcomes described are behaviours, interaction patterns and perceptions rather than a learning measure."
-        },
-        {
-          "record_id": 6189,
-          "screener_code": "E2",
-          "rationale": "The learning target is academic English language proficiency, which is language learning and therefore not STEM, even though the students are in agronomy. The main intervention is concordancers, with generative AI such as ChatGPT only among the alternative tools, but the domain failure is clear on its own."
-        },
-        {
-          "record_id": 9469,
-          "screener_code": "E3",
-          "rationale": "Both groups used generative AI: the experimental group followed a structured approach and the control group used GenAI without restrictions. This compares two generative AI variants with no non-AI control, so the comparison criterion fails (E3)."
-        },
-        {
-          "record_id": 13087,
-          "screener_code": "E10",
-          "rationale": "The venue is the companion proceedings of a software engineering conference, and the protocol excludes conference proceedings. The other criteria look met or unclear: the checklist-only group is a non-AI comparison and the topic is unit testing, which is computer science. Publication type fails, so the record is excluded."
-        }
-      ],
-      "tokens": {
-        "input_tokens": 486474,
-        "output_tokens": 91862
-      }
-    },
     "claude-haiku-5-5": {
-      "records_scored": 154,
-      "human_includes": 30,
-      "human_excludes": 124,
-      "errors": 8,
+      "records_scored": 162,
+      "human_includes": 25,
+      "human_excludes": 137,
+      "errors": 0,
       "table": {
         "pass_inc": 25,
-        "fail_inc": 5,
-        "pass_exc": 13,
-        "fail_exc": 111
+        "fail_inc": 0,
+        "pass_exc": 24,
+        "fail_exc": 113
       },
-      "sensitivity": 0.833,
+      "sensitivity": 1.0,
       "sensitivity_95ci": [
-        0.664,
-        0.927
+        0.867,
+        1.0
       ],
-      "specificity": 0.895,
+      "specificity": 0.825,
       "specificity_95ci": [
-        0.829,
-        0.938
+        0.753,
+        0.879
       ],
-      "kappa_pass_vs_exclude": 0.662,
-      "exclusion_code_agreement": 0.414,
+      "kappa_pass_vs_exclude": 0.592,
+      "exclusion_code_agreement": 0.319,
       "decisions": {
-        "include": 21,
-        "unsure": 17,
-        "exclude": 116
+        "include": 22,
+        "unsure": 27,
+        "exclude": 113
       },
-      "quotes_verified": "151/154",
-      "missed_human_includes": [
-        {
-          "record_id": 3403,
-          "screener_code": "E3",
-          "rationale": "The control group also used generative AI, so the study lacks a comparison group without generative AI, which is E3. Intervention, population, domain and outcome appear to be met; randomization is not stated."
-        },
-        {
-          "record_id": 3501,
-          "screener_code": "E3",
-          "rationale": "Both compared arms use GPT (GSL and GDL), and the abstract describes no group without generative AI, so the comparison fails E3. The abstract also reports no clear quantitative learning outcome, only behaviours, interaction patterns and perceptions."
-        },
-        {
-          "record_id": 6189,
-          "screener_code": "E2",
-          "rationale": "The study targets academic English language proficiency, which is non-STEM content, so E2 applies; the agronomy specialty is only the participant context. The experimental tool (concordancers) is not generative, and whether learners used ChatGPT is unclear, so E1 is not positively established."
-        },
-        {
-          "record_id": 9469,
-          "screener_code": "E3",
-          "rationale": "The control group used generative AI without restrictions, so the protocol's requirement for a comparison group that does not use generative AI is not met. The other criteria appear met, and the design, which the abstract does not describe clearly, is not needed for this decision."
-        },
-        {
-          "record_id": 13087,
-          "screener_code": "E10",
-          "rationale": "The venue is a conference companion, which the protocol lists as an ineligible publication type (E10). The other criteria appear met: ChatGPT is a generative AI tool, the checklist is a non-AI control, participants are students, the domain is software testing, and performance is measured."
-        }
-      ],
+      "quotes_verified": "142/162",
+      "missed_human_includes": [],
       "tokens": {
-        "input_tokens": 462279,
-        "output_tokens": 138237
+        "input_tokens": 191117,
+        "cache_creation_input_tokens": 10384,
+        "cache_read_input_tokens": 410168,
+        "output_tokens": 87994
       }
     }
   }
