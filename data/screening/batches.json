@@ -7,7 +7,22 @@
   "n": 5000,
   "first_record": 1,
   "last_record": 5242,
-  "state": "submitted"
+  "state": "applied",
+  "counts": {
+   "processing": 0,
+   "succeeded": 5000,
+   "errored": 0,
+   "canceled": 0,
+   "expired": 0
+  },
+  "applied": "2026-10-13T04:14:42+00:00",
+  "result": {
+   "include": 215,
+   "unsure": 598,
+   "exclude": 4187,
+   "failed": 0,
+   "to_review": 789
+  }
  },
  {
   "id": "msgbatch_016M1iyMq7LjbYbUPFMGGHLd",
@@ -17,7 +32,22 @@
   "n": 5000,
   "first_record": 5243,
   "last_record": 12951,
-  "state": "submitted"
+  "state": "applied",
+  "counts": {
+   "processing": 0,
+   "succeeded": 5000,
+   "errored": 0,
+   "canceled": 0,
+   "expired": 0
+  },
+  "applied": "2026-10-13T04:14:44+00:00",
+  "result": {
+   "include": 77,
+   "unsure": 376,
+   "exclude": 4547,
+   "failed": 0,
+   "to_review": 898
+  }
  },
  {
   "id": "msgbatch_01QpN9mm47GZZQEa6idiKfBS",
@@ -27,6 +57,21 @@
   "n": 400,
   "first_record": 12954,
   "last_record": 14556,
-  "state": "submitted"
+  "state": "applied",
+  "counts": {
+   "processing": 0,
+   "succeeded": 400,
+   "errored": 0,
+   "canceled": 0,
+   "expired": 0
+  },
+  "applied": "2026-10-13T04:14:45+00:00",
+  "result": {
+   "include": 8,
+   "unsure": 56,
+   "exclude": 336,
+   "failed": 0,
+   "to_review": 63
+  }
  }
 ]
