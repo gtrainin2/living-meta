@@ -105,6 +105,7 @@ def build_model():
     batches = load_json(DATA / "screening" / "batches.json", [])
     decisions = {d["record_id"]: d for d in load_jsonl(DATA / "screening" / "abstract_decisions-*.jsonl")}
     calib = load_json(DATA / "calibration" / "screener_report.json", {})
+    audit = load_json(DATA / "screening" / "audit_report.json", {})
     criteria, amended = parse_eligibility(ROOT / "prompts" / "eligibility.md")
 
     status = Counter(r["status"] for r in records)
@@ -180,7 +181,7 @@ def build_model():
         "review_total": review_total, "review_done": review_done,
         "candidates": candidates, "runs": run_rows, "batches": batches,
         "updated": updated, "calib": cal, "calib_model": cal_model,
-        "calib_prompt": calib.get("prompt_version"), "criteria": criteria, "amended": amended,
+        "calib_prompt": calib.get("prompt_version"), "audit": audit, "criteria": criteria, "amended": amended,
     }
 
 
@@ -329,6 +330,20 @@ def calib_html(m):
         f'The screener is tuned to pass anything it cannot rule out; a person reviews every pass at full text.</p>')
 
 
+def audit_html(m):
+    g = (m.get("audit") or {}).get("groups", {}).get("random_sample")
+    if not g or not g.get("audited"):
+        return ('<p class="note">A person is checking a 10% random sample of the screener\'s exclusions. '
+                'The share it got wrong will appear here as the audit proceeds.</p>')
+    lo, hi = g["ci95"]
+    return (f'<div class="cal"><div><span class="cal-n">{g["sent_to_fulltext"]}/{g["audited"]}</span>'
+            f'<span class="cal-l">random-sample exclusions a person<br>sent back to full-text review</span></div>'
+            f'<div><span class="cal-n">{100 * g["false_exclusion_rate"]:.1f}%</span>'
+            f'<span class="cal-l">false-exclusion rate<br>95% CI {100 * lo:.1f}–{100 * hi:.1f}%</span></div></div>'
+            f'<p class="note">Based on {g["audited"]} of {g["total"]} records in the random audit sample. '
+            f'Records a person sends back go to full-text review like any other candidate.</p>')
+
+
 def render(m):
     tpl = TEMPLATE.read_text(encoding="utf-8")
     updated = m["updated"].strftime("%B %-d, %Y") if m["updated"] else "not yet run"
@@ -349,6 +364,7 @@ def render(m):
         "CRITERIA": criteria_html(m),
         "AMENDED": E(m["amended"] or ""),
         "CALIB": calib_html(m),
+        "AUDIT": audit_html(m),
         "REPO": REPO_URL,
         "DATA": data,
     }

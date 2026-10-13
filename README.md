@@ -53,3 +53,11 @@ Calibration against 162 human-coded records (adjudicated): sensitivity 25/25, sp
 `.github/workflows/site.yml` rebuilds and publishes the site to GitHub Pages after every run of the search workflow, and whenever the site code changes. One-time setup: in the repository's Settings → Pages, set Source to "GitHub Actions". The site is then at https://gtrainin2.github.io/living-meta/.
 
 The pooled analysis section is a placeholder until full-text coding produces effect sizes.
+
+## Human audit of exclusions
+
+Every exclusion the screener flagged (random 10% sample, unverified quote, suspected injection) is in `data/screening/review_queue.csv`. A person fills `human_decision` with `confirm`, `recode` (plus `human_code`), or `fulltext`, and optional `human_notes`.
+
+The audit page (a private claude.ai artifact, built with `python -m pipeline.audit page OUT.html`) shows one record at a time in this order: suspected injections, the random sample, then unverified quotes. Its decisions are copied into the CSV with `python -m pipeline.audit merge decisions.json`.
+
+`python -m pipeline.audit apply` runs at the end of every workflow run. A `fulltext` record becomes `abstract_include` with `decided_by = human:audit`; a `recode` changes the exclusion code; reversing a call restores the screener's exclusion. It writes `data/screening/audit_report.json` with the false-exclusion rate on the random sample and its Wilson 95% interval, which the website shows under Methods.

@@ -1,0 +1,290 @@
+<title>Exclusion Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@600&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a reviewer's desk. Progress strip on top, one record at a time, the screener's call beside it, decision bar last */
+:root {
+  --bg: #F3F5F4; --surface: #FFFFFF; --ink: #16212A; --muted: #56636D; --rule: #D3DBD9;
+  --accent: #1D5E86; --accent-soft: #E1ECF3; --warn: #95600F; --warn-soft: #F6EBD8;
+  --good: #2C7350; --good-soft: #DDEFE5; --bad: #A33A2B; --bad-soft: #F6E1DD; --mark: #FBE7A6;
+  --display: "Spectral", Georgia, serif;
+  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10171C; --surface: #172129; --ink: #E2E9EC; --muted: #96A4AE; --rule: #2A3741;
+  --accent: #74B4DD; --accent-soft: #1B3142; --warn: #DDA752; --warn-soft: #3A2D17;
+  --good: #72C49D; --good-soft: #183427; --bad: #E58B7C; --bad-soft: #3B1F1B; --mark: #5A4A16; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #10171C; --surface: #172129; --ink: #E2E9EC; --muted: #96A4AE; --rule: #2A3741;
+  --accent: #74B4DD; --accent-soft: #1B3142; --warn: #DDA752; --warn-soft: #3A2D17;
+  --good: #72C49D; --good-soft: #183427; --bad: #E58B7C; --bad-soft: #3B1F1B; --mark: #5A4A16; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--body); margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 18px; padding-block: 24px 48px; display: grid; gap: 20px; }
+a { color: var(--accent); }
+button { font: inherit; cursor: pointer; }
+button:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 600 1.7rem/1.15 var(--display); margin: 4px 0 0; }
+
+/* Progress */
+.groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.grp { text-align: left; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 12px 14px; display: grid; gap: 6px; color: var(--ink); }
+.grp[aria-current="true"] { border-color: var(--ink); }
+.grp-top { display: flex; justify-content: space-between; gap: 8px; font-size: 0.9rem; font-weight: 600; }
+.grp-n { font: 500 0.85rem var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+.track { height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; }
+.fill { height: 100%; background: var(--good); width: 0; }
+.grp p { margin: 0; font-size: 0.8rem; color: var(--muted); }
+.status { font-size: 0.85rem; color: var(--muted); min-height: 1.4em; }
+.status.err { color: var(--bad); }
+
+/* Record */
+.desk { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 820px) { .desk { grid-template-columns: 1fr; } }
+.rec, .call { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 20px; display: grid; gap: 12px; min-width: 0; }
+.rec-head { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; justify-content: space-between; }
+.pos { font: 500 0.82rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.rec h2 { font: 600 1.25rem/1.35 var(--display); margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
+.meta { font-size: 0.88rem; color: var(--muted); overflow-wrap: anywhere; }
+.abstract { font-size: 0.97rem; line-height: 1.65; max-width: 72ch; overflow-wrap: anywhere; }
+.abstract.none { color: var(--muted); font-style: italic; }
+mark { background: var(--mark); color: inherit; padding: 0 1px; border-radius: 2px; }
+.call h3 { font: 600 0.95rem var(--body); margin: 0; }
+.code { display: inline-flex; gap: 8px; align-items: baseline; font-weight: 600; }
+.code b { font: 500 0.85rem var(--mono); background: var(--bad-soft); color: var(--bad); padding: 3px 7px; border-radius: 3px; }
+.call p { margin: 0; font-size: 0.9rem; color: var(--muted); }
+.quote { border-left: 3px solid var(--rule); padding-left: 10px; font-size: 0.9rem; }
+.tag { font: 500 0.7rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 6px; border-radius: 3px; }
+.tag.ok { background: var(--good-soft); color: var(--good); }
+.tag.no { background: var(--warn-soft); color: var(--warn); }
+.why { font-size: 0.82rem; color: var(--muted); }
+
+/* Decision */
+.decide { background: var(--surface); border: 1px solid var(--ink); border-radius: 4px; padding: 16px 20px; display: grid; gap: 14px; }
+.choices { display: flex; flex-wrap: wrap; gap: 10px; }
+.choice { border: 1px solid var(--rule); background: var(--bg); color: var(--ink); border-radius: 4px; padding: 10px 14px; font-weight: 600; display: inline-flex; gap: 10px; align-items: center; }
+.choice kbd { font: 500 0.72rem var(--mono); border: 1px solid var(--rule); border-radius: 3px; padding: 1px 5px; color: var(--muted); background: var(--surface); }
+.choice[aria-pressed="true"].confirm { background: var(--good-soft); border-color: var(--good); color: var(--good); }
+.choice[aria-pressed="true"].recode { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+.choice[aria-pressed="true"].fulltext { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.codes { display: flex; flex-wrap: wrap; gap: 6px; }
+.codes button { font: 500 0.82rem var(--mono); border: 1px solid var(--rule); background: var(--surface); color: var(--ink); border-radius: 3px; padding: 6px 8px; }
+.codes button[aria-pressed="true"] { background: var(--warn); color: var(--surface); border-color: var(--warn); }
+.codes button[disabled] { opacity: 0.4; cursor: default; }
+textarea { width: 100%; min-height: 54px; font: inherit; font-size: 0.92rem; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); color: var(--ink); resize: vertical; }
+.nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+.nav-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { border: 1px solid var(--ink); background: transparent; color: var(--ink); border-radius: 4px; padding: 8px 14px; font-weight: 500; }
+.btn.primary { background: var(--ink); color: var(--bg); }
+.btn[disabled] { opacity: 0.4; cursor: default; }
+.saved { font-size: 0.85rem; color: var(--muted); }
+.keys { font-size: 0.8rem; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Living meta-analysis · abstract screening audit</p>
+    <h1>Exclusion Audit</h1>
+  </header>
+
+  <div class="groups" id="groups"></div>
+  <p class="status" id="status" aria-live="polite">Connecting to the shared record of decisions…</p>
+
+  <div class="desk">
+    <article class="rec" aria-labelledby="title">
+      <div class="rec-head"><span class="pos" id="pos"></span><span class="why" id="why"></span></div>
+      <h2 id="title"></h2>
+      <div class="meta" id="meta"></div>
+      <div class="abstract" id="abstract"></div>
+    </article>
+    <aside class="call" aria-label="Screener decision">
+      <h3>The screener excluded this record</h3>
+      <div class="code" id="code"></div>
+      <p id="rationale"></p>
+      <div id="quotebox"></div>
+    </aside>
+  </div>
+
+  <section class="decide" aria-label="Your decision">
+    <div class="choices" role="group" aria-label="Decision">
+      <button type="button" class="choice confirm" data-d="confirm" aria-pressed="false">Exclusion is right <kbd>C</kbd></button>
+      <button type="button" class="choice recode" data-d="recode" aria-pressed="false">Excluded, wrong code <kbd>R</kbd></button>
+      <button type="button" class="choice fulltext" data-d="fulltext" aria-pressed="false">Send to full-text review <kbd>F</kbd></button>
+    </div>
+    <div class="codes" id="codes" role="group" aria-label="Correct exclusion code"></div>
+    <label for="notes" class="keys">Notes (optional)</label>
+    <textarea id="notes" placeholder="Why you overrode the screener, or anything to check at full text"></textarea>
+    <div class="nav">
+      <span class="saved" id="saved"></span>
+      <div class="nav-btns">
+        <button type="button" class="btn" id="prev">← Previous</button>
+        <button type="button" class="btn" id="next">Next →</button>
+        <button type="button" class="btn primary" id="jump">Next unaudited</button>
+      </div>
+    </div>
+    <p class="keys">Keys: C, R, F to decide · 1–9 and 0 pick E1–E10 when recoding · J / K next and previous · N next unaudited</p>
+  </section>
+</div>
+
+<script type="application/json" id="data">{{DATA}}</script>
+<script>
+(function () {
+  var ITEMS = JSON.parse(document.getElementById("data").textContent);
+  var GROUPS = [
+    {g: "injection", name: "Possible prompt injection", note: "Odd text in the record. Check these first."},
+    {g: "random", name: "Random audit sample", note: "Gives the screener's error rate. 200 is a usable first pass."},
+    {g: "quote", name: "Quote not found", note: "The screener's quote isn't verbatim in the abstract."}
+  ];
+  var CODES = {E1: "Not learner-facing generative AI", E2: "Content is not STEM", E3: "No control group without generative AI",
+    E4: "Not K-12 or higher education students", E5: "No quantitative learning outcome", E6: "Not an empirical study",
+    E7: "Insufficient data", E8: "Duplicate or superseded", E9: "Full text not in English", E10: "Publication type not eligible"};
+  var decisions = {};          // record id -> {decision, code, notes, by, at}
+  var db = null, me = null, writable = false;
+  var idx = 0;
+  try { var s = localStorage.getItem("audit-pos"); if (s !== null && +s < ITEMS.length) idx = +s; } catch (e) {}
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function col(g) { return "audit_" + g; }
+  function setStatus(t, err) { var el = $("status"); el.textContent = t; el.className = "status" + (err ? " err" : ""); }
+
+  // Code chips
+  $("codes").innerHTML = Object.keys(CODES).map(function (c) {
+    return '<button type="button" data-c="' + c + '" title="' + esc(CODES[c]) + '" aria-pressed="false">' + c + "</button>";
+  }).join("");
+
+  function highlight(text, quote) {
+    var safe = esc(text);
+    if (!quote) return safe;
+    var q = esc(quote.trim().replace(/^["“]|["”]$/g, ""));
+    var at = safe.toLowerCase().indexOf(q.toLowerCase());
+    return at < 0 ? safe : safe.slice(0, at) + "<mark>" + safe.slice(at, at + q.length) + "</mark>" + safe.slice(at + q.length);
+  }
+
+  function drawGroups() {
+    var cur = ITEMS[idx] && ITEMS[idx].g;
+    $("groups").innerHTML = GROUPS.map(function (G) {
+      var all = ITEMS.filter(function (x) { return x.g === G.g; });
+      var done = all.filter(function (x) { return decisions[x.id]; }).length;
+      var back = all.filter(function (x) { return decisions[x.id] && decisions[x.id].decision === "fulltext"; }).length;
+      return '<button type="button" class="grp" data-g="' + G.g + '" aria-current="' + (cur === G.g) + '">' +
+        '<span class="grp-top"><span>' + G.name + '</span><span class="grp-n">' + done + " / " + all.length + "</span></span>" +
+        '<span class="track"><span class="fill" style="width:' + (all.length ? 100 * done / all.length : 0) + '%"></span></span>' +
+        "<p>" + G.note + (back ? " " + back + " sent to full text so far." : "") + "</p></button>";
+    }).join("");
+  }
+
+  function draw() {
+    var it = ITEMS[idx];
+    if (!it) return;
+    var groupItems = ITEMS.filter(function (x) { return x.g === it.g; });
+    $("pos").textContent = "Record " + (groupItems.indexOf(it) + 1) + " of " + groupItems.length + " · #" + it.id;
+    $("why").textContent = it.why;
+    $("title").innerHTML = it.u ? '<a href="' + esc(it.u) + '" target="_blank" rel="noopener">' + esc(it.t) + "</a>" : esc(it.t);
+    $("meta").textContent = [it.v, it.y].filter(Boolean).join(" · ");
+    var ab = $("abstract");
+    ab.className = "abstract" + (it.ab ? "" : " none");
+    ab.innerHTML = it.ab ? highlight(it.ab, it.q) : "No abstract on record. Open the link to check the paper.";
+    $("code").innerHTML = "<b>" + esc(it.c || "–") + "</b><span>" + esc(CODES[it.c] || "No code given") + "</span>";
+    $("rationale").textContent = it.r;
+    $("quotebox").innerHTML = it.q ? '<div class="quote">' + esc(it.q) + '</div><span class="tag ' + (it.qv ? "ok" : "no") + '">' +
+      (it.qv ? "Quote found in abstract" : "Quote not in abstract") + "</span>" : "";
+    var d = decisions[it.id] || {};
+    document.querySelectorAll(".choice").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.d === d.decision)); b.disabled = !writable; });
+    document.querySelectorAll("#codes button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(d.decision === "recode" && b.dataset.c === d.code));
+      b.disabled = !writable || b.dataset.c === it.c;
+    });
+    if (document.activeElement !== $("notes")) $("notes").value = d.notes || "";
+    $("notes").disabled = !writable;
+    $("saved").textContent = d.decision ? "Saved " + new Date(d.at).toLocaleString([], {dateStyle: "medium", timeStyle: "short"}) +
+      (me && d.by && d.by !== me ? " by a colleague" : "") : "Not audited yet";
+    $("prev").disabled = idx === 0;
+    $("next").disabled = idx === ITEMS.length - 1;
+    drawGroups();
+    try { localStorage.setItem("audit-pos", String(idx)); } catch (e) {}
+  }
+
+  function go(i) { idx = Math.max(0, Math.min(ITEMS.length - 1, i)); draw(); window.scrollTo({top: 0}); }
+  function nextOpen() {
+    for (var k = 1; k <= ITEMS.length; k++) {
+      var j = (idx + k) % ITEMS.length;
+      if (!decisions[ITEMS[j].id]) return go(j);
+    }
+    setStatus("Every record in the queue has a decision.");
+  }
+
+  function save(patch) {
+    if (!writable) return;
+    var it = ITEMS[idx], prev = decisions[it.id] || {};
+    var rec = {decision: patch.decision || prev.decision || "", code: "", notes: $("notes").value.trim(),
+               by: me || "", at: new Date().toISOString(), record_id: it.id};
+    if (rec.decision === "recode") rec.code = patch.code || (prev.decision === "recode" ? prev.code : "") || "";
+    if (!rec.decision) return;
+    decisions[it.id] = rec;
+    draw();
+    if (rec.decision === "recode" && !rec.code) { $("saved").textContent = "Pick the correct code to save"; delete decisions[it.id]; drawGroups(); return; }
+    db.collection(col(it.g)).doc(String(it.id)).set(rec).then(function () {
+      setStatus("Saved. Decisions are shared with anyone who can edit this page.");
+    }).catch(function (e) {
+      setStatus(e && e.code === "not_granted" ? "You can view this page but not save decisions." : "That decision didn't save. Try again in a moment.", true);
+    });
+  }
+
+  document.querySelectorAll(".choice").forEach(function (b) {
+    b.addEventListener("click", function () { save({decision: b.dataset.d}); });
+  });
+  $("codes").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b || b.disabled) return;
+    save({decision: "recode", code: b.dataset.c});
+  });
+  $("notes").addEventListener("change", function () { if (decisions[ITEMS[idx].id]) save({}); });
+  $("prev").addEventListener("click", function () { go(idx - 1); });
+  $("next").addEventListener("click", function () { go(idx + 1); });
+  $("jump").addEventListener("click", nextOpen);
+  $("groups").addEventListener("click", function (e) {
+    var b = e.target.closest(".grp"); if (!b) return;
+    var first = ITEMS.findIndex(function (x) { return x.g === b.dataset.g && !decisions[x.id]; });
+    if (first < 0) first = ITEMS.findIndex(function (x) { return x.g === b.dataset.g; });
+    go(first);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.target.tagName === "TEXTAREA" || e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key.toLowerCase();
+    if (k === "c") save({decision: "confirm"});
+    else if (k === "f") save({decision: "fulltext"});
+    else if (k === "r") save({decision: "recode"});
+    else if (/^[0-9]$/.test(k)) { var c = "E" + (k === "0" ? 10 : k); if (c !== ITEMS[idx].c) save({decision: "recode", code: c}); }
+    else if (k === "j") go(idx + 1);
+    else if (k === "k") go(idx - 1);
+    else if (k === "n") nextOpen();
+    else return;
+    e.preventDefault();
+  });
+
+  draw();
+
+  (window.claude ? Promise.all([claude.use("db"), claude.use("user")]) : Promise.resolve([null, null])).then(function (caps) {
+    db = caps[0];
+    var user = caps[1];
+    if (!db) { setStatus("Decisions can't be saved in this view. Open the page on claude.ai while signed in.", true); return; }
+    var ready = 0;
+    GROUPS.forEach(function (G) {
+      db.collection(col(G.g)).onSnapshot(function (snap) {
+        snap.docs.forEach(function (d) { decisions[+d.id] = d.data(); });
+        snap.docChanges().forEach(function (ch) { if (ch.type === "removed") delete decisions[+ch.doc.id]; });
+        if (++ready === GROUPS.length) setStatus("Ready. Each decision saves as soon as you make it.");
+        draw();
+      }, function () { setStatus("Lost the connection to saved decisions. Reload the page.", true); });
+    });
+    var canWrite = user ? user.can("data.write") : Promise.resolve(null);
+    return Promise.all([user ? user.id() : null, canWrite]).then(function (r) {
+      me = r[0]; writable = r[1] !== false; draw();
+    });
+  }).catch(function () { setStatus("Couldn't connect to saved decisions. Reload the page.", true); });
+})();
+</script>

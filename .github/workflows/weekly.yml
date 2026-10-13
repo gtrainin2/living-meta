@@ -43,6 +43,9 @@ jobs:
           else
             python -m pipeline.search "$MODE" 2> data/last_run.err | tee data/last_run.json
           fi
+      - name: Apply audit decisions
+        if: always()
+        run: python -m pipeline.audit apply > data/last_audit.json
       - name: Commit records
         if: always()
         run: |
