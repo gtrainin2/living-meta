@@ -1,2 +1,2 @@
-submit
-requested 2026-10-12 22:25 baseline abstract screening via batches
+poll
+requested 2026-10-13 04:15 UTC collect baseline batches
