@@ -1,4 +1,5 @@
 name: Website
+# Requires Settings → Pages → Source: "GitHub Actions" (enabled 2026-10-13). Site: https://gtrainin2.github.io/living-meta/
 on:
   workflow_run:
     workflows: ["Weekly search"]   # rebuild after every search or screening run
