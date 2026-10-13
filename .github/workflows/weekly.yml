@@ -25,12 +25,17 @@ jobs:
           CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
           OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           S2_API_KEY: ${{ secrets.S2_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           MODE="${{ inputs.mode }}"
           if [ -z "$MODE" ] && [ "${{ github.event_name }}" = "push" ]; then MODE="$(head -n1 run-request.txt | tr -d '[:space:]')"; fi
-          case "$MODE" in counts|baseline|weekly|dedup|rules) ;; *) MODE=weekly ;; esac
+          case "$MODE" in counts|baseline|weekly|dedup|rules|calibrate) ;; *) MODE=weekly ;; esac
           echo "mode: $MODE"
-          python -m pipeline.search "$MODE" 2> data/last_run.err | tee data/last_run.json
+          if [ "$MODE" = calibrate ]; then
+            python -m pipeline.screen calibrate 2> data/last_run.err | tee data/last_run.json
+          else
+            python -m pipeline.search "$MODE" 2> data/last_run.err | tee data/last_run.json
+          fi
       - name: Commit records
         if: always()
         run: |
