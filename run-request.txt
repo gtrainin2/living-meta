@@ -1,2 +1,2 @@
-second
-requested 2026-10-13 23:02 resubmit second screen with auto tool choice
+poll
+requested 2026-10-13 23:12 collect resubmitted second screen
