@@ -1,4 +1,13 @@
 {
-  "submitted": 947,
-  "model": "claude-sonnet-5-5"
+  "msgbatch_01CvdpQ1hvopHSd7kMLAKq37": {
+    "agree_exclude": 0,
+    "disagree": 0,
+    "failed": 947
+  },
+  "status_counts": {
+    "abstract_include": 300,
+    "abstract_unsure": 1030,
+    "excluded": 13138,
+    "superseded": 89
+  }
 }
