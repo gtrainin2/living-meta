@@ -101,5 +101,14 @@
     "ValueError: errored: {\"type\": \"error\", \"error\": {\"details\": null, \"type\": \"invalid_request_error\", \"message\": \"tool_choice: type \\\"tool\\\" and \\\"any\\\" are not supported for this model.\"}, \"request_id\":": 947
    }
   }
+ },
+ {
+  "id": "msgbatch_018PvtwR5A3jPTfk2WzPCSS8",
+  "kind": "second",
+  "created": "2026-10-14T04:02:10+00:00",
+  "model": "claude-sonnet-5-5",
+  "prompt_version": "screener-0.4",
+  "n": 947,
+  "state": "submitted"
  }
 ]
