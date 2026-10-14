@@ -55,10 +55,10 @@ def save_batches(b):
     (OUT / "batches.json").write_text(json.dumps(b, indent=1))
 
 
-def request_for(rec):
+def request_for(rec, model=MODEL):
     fixed, record = screen.build_prompt(rec)
     return {"custom_id": f"r{rec['record_id']}",
-            "params": {"model": MODEL, "max_tokens": 1200,
+            "params": {"model": model, "max_tokens": 1200,
                        "system": [{"type": "text", "text": fixed, "cache_control": {"type": "ephemeral"}}],
                        "tools": [screen.TOOL], "tool_choice": {"type": "tool", "name": "record_decision"},
                        "messages": [{"role": "user", "content": record}]}}
@@ -86,6 +86,89 @@ def submit(key, post=None, limit=None):
     db.save(con, DB)
     export_csv(con, DB.with_suffix(".csv"))
     return {"submitted": len(recs), "batches": [b["id"] for b in batches if b["state"] == "submitted"]}
+
+
+SECOND_MODEL = "claude-sonnet-5-5"
+REVIEW_FIELDS = ["record_id", "screener_decision", "exclusion_code", "reason", "title", "rationale",
+                 "second_screen", "second_decision", "second_code", "second_rationale",
+                 "human_decision", "human_code", "human_notes"]
+
+
+def read_review():
+    with open(OUT / "review_queue.csv", newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    for r in rows:
+        for k in REVIEW_FIELDS:
+            r.setdefault(k, "")
+    return rows
+
+
+def write_review(rows):
+    with open(OUT / "review_queue.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=REVIEW_FIELDS)
+        w.writeheader()
+        w.writerows({k: r.get(k, "") for k in REVIEW_FIELDS} for r in rows)
+
+
+def submit_second(key, post=None):
+    """Send open review rows whose quote did not verify to a second, stronger screener."""
+    post = post or (lambda body: requests.post(API, headers=headers(key), json=body, timeout=600))
+    con = db.connect(DB)
+    rows = read_review()
+    ids = [int(r["record_id"]) for r in rows if "quote not found" in r["reason"]
+           and not r["human_decision"] and not r["second_screen"]]
+    if not ids:
+        return {"submitted": 0}
+    recs = [dict(r) for r in con.execute(f"SELECT record_id, title, abstract, venue, year FROM records "
+                                         f"WHERE record_id IN ({','.join(map(str, ids))})")]
+    r = post({"requests": [request_for(x, SECOND_MODEL) for x in recs]})
+    if r.status_code != 200:
+        raise SystemExit(f"Batch create failed: HTTP {r.status_code} {r.text[:300]}")
+    batches = load_batches()
+    batches.append({"id": r.json()["id"], "kind": "second", "created": now(), "model": SECOND_MODEL,
+                    "prompt_version": screen.PROMPT_VERSION, "n": len(recs), "state": "submitted"})
+    save_batches(batches)
+    for row in rows:
+        if int(row["record_id"]) in ids:
+            row["second_screen"] = "submitted"
+    write_review(rows)
+    return {"submitted": len(recs), "model": SECOND_MODEL}
+
+
+def apply_second(lines, batch):
+    """Agreement on exclude closes the review row. Anything else stays open for a person."""
+    rows = {int(r["record_id"]): r for r in read_review()}
+    out = {"agree_exclude": 0, "disagree": 0, "failed": 0}
+    log = []
+    for line in lines:
+        res = json.loads(line)
+        rid = int(res["custom_id"][1:])
+        row = rows.get(rid)
+        if row is None:
+            continue
+        try:
+            msg = res["result"]["message"]
+            dec = screen.parse(next(b["input"] for b in msg["content"] if b.get("type") == "tool_use"))
+        except Exception:
+            row["second_screen"] = ""          # resubmitted next time
+            out["failed"] += 1
+            continue
+        row.update(second_decision=dec["decision"], second_code=dec.get("exclusion_code") or "",
+                   second_rationale=dec.get("rationale", ""))
+        if dec["decision"] == "exclude":
+            row["second_screen"] = "agree_exclude"
+            out["agree_exclude"] += 1
+        else:
+            row["second_screen"] = "disagree"
+            out["disagree"] += 1
+        log.append({"record_id": rid, "batch": batch["id"], "model": batch["model"],
+                    "prompt_version": batch["prompt_version"], "decided": now(), **dec,
+                    "usage": msg.get("usage")})
+    write_review(list(rows.values()))
+    with open(OUT / "second_screen_decisions.jsonl", "a", encoding="utf-8") as f:
+        for r in log:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    return out
 
 
 def apply_results(con, lines, batch, rng):
@@ -152,14 +235,8 @@ def append_jsonl(rows):
 
 
 def append_review(rows):
-    f = OUT / "review_queue.csv"
-    new = not f.exists()
-    with open(f, "a", newline="", encoding="utf-8") as fh:
-        w = csv.DictWriter(fh, fieldnames=["record_id", "screener_decision", "exclusion_code", "reason", "title",
-                                           "rationale", "human_decision", "human_code", "human_notes"])
-        if new:
-            w.writeheader()
-        w.writerows(rows)
+    existing = read_review() if (OUT / "review_queue.csv").exists() else []
+    write_review(existing + rows)
 
 
 def poll(key, get=None):
@@ -177,10 +254,13 @@ def poll(key, get=None):
             summary[b["id"]] = {"status": info.get("processing_status"), "counts": b["counts"]}
             continue
         lines = [l for l in get(info["results_url"]).text.splitlines() if l.strip()]
-        rng = random.Random(b["id"])
-        out, log, review = apply_results(con, lines, b, rng)
-        append_jsonl(log)
-        append_review(review)
+        if b.get("kind") == "second":
+            out = apply_second(lines, b)
+        else:
+            rng = random.Random(b["id"])
+            out, log, review = apply_results(con, lines, b, rng)
+            append_jsonl(log)
+            append_review(review)
         b.update(state="applied", applied=now(), result=out)
         summary[b["id"]] = out
         con.commit()
@@ -194,14 +274,15 @@ def poll(key, get=None):
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["submit", "poll"])
+    ap.add_argument("mode", choices=["submit", "second", "poll"])
     ap.add_argument("--limit", type=int)
     args = ap.parse_args(argv)
     key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
     if not key:
         raise SystemExit("ANTHROPIC_API_KEY is not set")
     OUT.mkdir(parents=True, exist_ok=True)
-    res = submit(key, limit=args.limit) if args.mode == "submit" else poll(key)
+    res = {"submit": lambda: submit(key, limit=args.limit), "second": lambda: submit_second(key),
+           "poll": lambda: poll(key)}[args.mode]()
     print(json.dumps(res, indent=2))
     return 0
 

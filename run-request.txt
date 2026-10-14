@@ -1,2 +1,2 @@
-poll
-requested 2026-10-13 04:15 UTC collect baseline batches
+second
+requested 2026-10-13 22:22 second screen of quote mismatches with Sonnet

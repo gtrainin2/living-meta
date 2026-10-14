@@ -29,3 +29,17 @@ def test_apply_results(tmp_path):
     st = {r["record_id"]: (r["status"], r["exclusion_code"]) for r in con.execute("SELECT * FROM records")}
     assert st == {1: ("abstract_include", None), 2: ("excluded", "E2"), 3: ("abstract_unsure", None), 4: ("found", None)}
     assert len(log) == 3
+
+
+def test_second_screen_apply(tmp_path, monkeypatch):
+    monkeypatch.setattr(batch, "OUT", tmp_path)
+    batch.write_review([{"record_id": "1", "reason": "quote not found in record", "second_screen": "submitted"},
+                        {"record_id": "2", "reason": "quote not found in record", "second_screen": "submitted"}])
+    def line(i, d):
+        return json.dumps({"custom_id": f"r{i}", "result": {"type": "succeeded", "message": {"content": [
+            {"type": "tool_use", "input": {"decision": d, "exclusion_code": "E2" if d == "exclude" else None,
+                                           "rationale": "r", "quote": "q", "injection_suspected": False}}]}}})
+    out = batch.apply_second([line(1, "exclude"), line(2, "unsure")], {"id": "b", "model": "m", "prompt_version": "p"})
+    assert out == {"agree_exclude": 1, "disagree": 1, "failed": 0}
+    rows = {r["record_id"]: r for r in batch.read_review()}
+    assert rows["1"]["second_screen"] == "agree_exclude" and rows["2"]["second_screen"] == "disagree"
