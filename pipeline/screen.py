@@ -62,8 +62,8 @@ def cap(text):
 INJECTION = re.compile(
     r"ignore (all |any )?(the )?(previous|prior|above|earlier) (instructions|prompts?|rules)|"
     r"disregard (all |the )?(previous|prior|above) |"
-    r"(you are|act as) (an? )?(ai|assistant|language model|llm|chatgpt|claude)\b|"
-    r"(system|developer) prompt|"
+    r"\byou are (now )?(an? )?(ai|assistant|language model|llm|chatgpt|claude|reviewer)\b|"
+    r"(new|hidden|override) (system )?instructions?:|"
     r"(reviewers?|screeners?|ai systems?|language models?|llms?)[,:]? (must|should|please) (include|accept|rate|mark|recommend)|"
     r"(mark|rate|classify) this (paper|article|record|study) as (include|eligible|relevant|positive)", re.I)
 
