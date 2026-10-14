@@ -1,12 +1,10 @@
 {
   "msgbatch_018PvtwR5A3jPTfk2WzPCSS8": {
-    "status": "in_progress",
-    "counts": {
-      "processing": 947,
-      "succeeded": 0,
-      "errored": 0,
-      "canceled": 0,
-      "expired": 0
+    "agree_exclude": 918,
+    "disagree": 27,
+    "failed": 2,
+    "errors": {
+      "ValueError: bad decision None": 2
     }
   },
   "status_counts": {

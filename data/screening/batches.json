@@ -109,13 +109,22 @@
   "model": "claude-sonnet-5-5",
   "prompt_version": "screener-0.4",
   "n": 947,
-  "state": "submitted",
+  "state": "applied",
   "counts": {
-   "processing": 947,
-   "succeeded": 0,
+   "processing": 0,
+   "succeeded": 947,
    "errored": 0,
    "canceled": 0,
    "expired": 0
+  },
+  "applied": "2026-10-14T04:31:17+00:00",
+  "result": {
+   "agree_exclude": 918,
+   "disagree": 27,
+   "failed": 2,
+   "errors": {
+    "ValueError: bad decision None": 2
+   }
   }
  }
 ]
