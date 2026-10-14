@@ -1,2 +1,2 @@
-second
-requested 2026-10-13 22:22 second screen of quote mismatches with Sonnet
+poll
+requested 2026-10-13 22:51 collect second screen
