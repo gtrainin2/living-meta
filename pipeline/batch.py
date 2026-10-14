@@ -147,11 +147,16 @@ def apply_second(lines, batch):
         if row is None:
             continue
         try:
+            if res["result"]["type"] != "succeeded":
+                raise ValueError(f"{res['result']['type']}: {json.dumps(res['result'].get('error'))[:300]}")
             msg = res["result"]["message"]
             dec = screen.parse(next(b["input"] for b in msg["content"] if b.get("type") == "tool_use"))
-        except Exception:
+        except Exception as e:
             row["second_screen"] = ""          # resubmitted next time
             out["failed"] += 1
+            out.setdefault("errors", {})
+            k = f"{type(e).__name__}: {e}"[:200]
+            out["errors"][k] = out["errors"].get(k, 0) + 1
             continue
         row.update(second_decision=dec["decision"], second_code=dec.get("exclusion_code") or "",
                    second_rationale=dec.get("rationale", ""))

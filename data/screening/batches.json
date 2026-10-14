@@ -84,7 +84,7 @@
   "model": "claude-sonnet-5-5",
   "prompt_version": "screener-0.4",
   "n": 947,
-  "state": "applied",
+  "state": "submitted",
   "counts": {
    "processing": 0,
    "succeeded": 0,
@@ -92,11 +92,6 @@
    "canceled": 0,
    "expired": 0
   },
-  "applied": "2026-10-14T03:51:15+00:00",
-  "result": {
-   "agree_exclude": 0,
-   "disagree": 0,
-   "failed": 947
-  }
+  "applied": "2026-10-14T03:51:15+00:00"
  }
 ]

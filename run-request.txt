@@ -1,2 +1,2 @@
 poll
-requested 2026-10-13 22:51 collect second screen
+requested 2026-10-13 22:58 re-collect second screen with error detail
