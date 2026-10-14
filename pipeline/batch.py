@@ -55,12 +55,20 @@ def save_batches(b):
     (OUT / "batches.json").write_text(json.dumps(b, indent=1))
 
 
+# Some models reject a forced tool choice; the prompt already asks for the tool, so "auto" is enough there.
+AUTO_TOOL_MODELS = {"claude-sonnet-5-5"}
+
+
+def tool_choice(model):
+    return {"type": "auto"} if model in AUTO_TOOL_MODELS else {"type": "tool", "name": "record_decision"}
+
+
 def request_for(rec, model=MODEL):
     fixed, record = screen.build_prompt(rec)
     return {"custom_id": f"r{rec['record_id']}",
             "params": {"model": model, "max_tokens": 1200,
                        "system": [{"type": "text", "text": fixed, "cache_control": {"type": "ephemeral"}}],
-                       "tools": [screen.TOOL], "tool_choice": {"type": "tool", "name": "record_decision"},
+                       "tools": [screen.TOOL], "tool_choice": tool_choice(model),
                        "messages": [{"role": "user", "content": record}]}}
 
 
@@ -150,7 +158,8 @@ def apply_second(lines, batch):
             if res["result"]["type"] != "succeeded":
                 raise ValueError(f"{res['result']['type']}: {json.dumps(res['result'].get('error'))[:300]}")
             msg = res["result"]["message"]
-            dec = screen.parse(next(b["input"] for b in msg["content"] if b.get("type") == "tool_use"))
+            tool = next((b["input"] for b in msg["content"] if b.get("type") == "tool_use"), None)
+            dec = screen.parse(tool if tool is not None else "".join(b.get("text", "") for b in msg["content"]))
         except Exception as e:
             row["second_screen"] = ""          # resubmitted next time
             out["failed"] += 1

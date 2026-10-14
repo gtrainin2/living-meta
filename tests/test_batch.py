@@ -43,3 +43,8 @@ def test_second_screen_apply(tmp_path, monkeypatch):
     assert out == {"agree_exclude": 1, "disagree": 1, "failed": 0}
     rows = {r["record_id"]: r for r in batch.read_review()}
     assert rows["1"]["second_screen"] == "agree_exclude" and rows["2"]["second_screen"] == "disagree"
+
+
+def test_tool_choice_by_model():
+    assert batch.tool_choice("claude-sonnet-5-5") == {"type": "auto"}
+    assert batch.tool_choice("claude-haiku-5-5")["type"] == "tool"
