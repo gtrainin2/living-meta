@@ -1,10 +1,10 @@
 {
- "generated": "2026-10-14T02:08:53+00:00",
- "queue": 1750,
- "audited": 0,
+ "generated": "2026-10-14T03:20:31+00:00",
+ "queue": 1222,
+ "audited": 3,
  "groups": {
   "random_sample": {
-   "total": 883,
+   "total": 0,
    "audited": 0,
    "sent_to_fulltext": 0,
    "recoded": 0,
@@ -15,7 +15,7 @@
    ]
   },
   "quote_not_found": {
-   "total": 864,
+   "total": 947,
    "audited": 0,
    "sent_to_fulltext": 0,
    "recoded": 0,
@@ -26,7 +26,7 @@
    ]
   },
   "injection": {
-   "total": 3,
+   "total": 0,
    "audited": 0,
    "sent_to_fulltext": 0,
    "recoded": 0,
