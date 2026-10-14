@@ -1,2 +1,2 @@
 poll
-requested 2026-10-13 23:12 collect resubmitted second screen
+requested 2026-10-13 23:31 collect second screen
