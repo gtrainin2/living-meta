@@ -21,7 +21,7 @@ from . import db
 
 ROOT = Path(__file__).resolve().parent.parent
 CAL = ROOT / "data" / "calibration"
-PROMPT_VERSION = "screener-0.3"
+PROMPT_VERSION = "screener-0.4"
 API = "https://api.anthropic.com/v1/messages"
 
 
@@ -50,13 +50,39 @@ TOOL = {
 }
 
 
+ABSTRACT_CAP = 2000          # characters; some indexes store a full text in the abstract field
+
+
+def cap(text):
+    if not text or len(text) <= ABSTRACT_CAP:
+        return text
+    return text[:ABSTRACT_CAP].rsplit(" ", 1)[0] + " [truncated: the index stored a longer text]"
+
+
+INJECTION = re.compile(
+    r"ignore (all |any )?(the )?(previous|prior|above|earlier) (instructions|prompts?|rules)|"
+    r"disregard (all |the )?(previous|prior|above) |"
+    r"(you are|act as) (an? )?(ai|assistant|language model|llm|chatgpt|claude)\b|"
+    r"(system|developer) prompt|"
+    r"(reviewers?|screeners?|ai systems?|language models?|llms?)[,:]? (must|should|please) (include|accept|rate|mark|recommend)|"
+    r"(mark|rate|classify) this (paper|article|record|study) as (include|eligible|relevant|positive)", re.I)
+
+
+def injection_passage(text):
+    """The first passage that looks written to steer an automated reviewer, with context, or None."""
+    m = INJECTION.search(text or "")
+    if not m:
+        return None
+    return (text[max(0, m.start() - 80):m.end() + 80]).replace("\n", " ")
+
+
 def build_prompt(rec, stage="abstract"):
     """Returns (fixed instructions, record message). The fixed part is identical for every record."""
     tmpl = (ROOT / "prompts" / "screener.md").read_text(encoding="utf-8").split("-->", 1)[1].lstrip()
     elig = (ROOT / "prompts" / "eligibility.md").read_text(encoding="utf-8")
     fixed, record = tmpl.split("=====RECORD=====")
     body = (f"Title: {rec['title']}\nVenue: {rec['venue'] or 'not given'}\nYear: {rec['year'] or 'not given'}\n"
-            f"Abstract: {rec['abstract'] or '[no abstract in the index]'}")
+            f"Abstract: {cap(rec['abstract']) or '[no abstract in the index]'}")
     fixed = fixed.replace("{{eligibility_table_and_exclusion_codes}}", elig).strip()
     record = (record.replace("{{stage}}", stage).replace("{{record_id}}", str(rec["record_id"]))
               .replace("{{record}}", body).strip())

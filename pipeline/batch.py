@@ -31,7 +31,8 @@ OUT = ROOT / "data" / "screening"
 DB = ROOT / "data" / "records.sqlite"
 MODEL = "claude-haiku-5-5"
 CHUNK = 5000
-SAMPLE_RATE = 0.10          # share of screener excludes sent to a person (protocol section 4)
+SAMPLE_RATE = 0.10          # weekly runs: share of screener excludes sent to a person (protocol section 4)
+BASELINE_AUDIT = 300        # baseline: fixed audit sample of screener excludes (PI decision 2026-10-13)
 API = "https://api.anthropic.com/v1/messages/batches"
 STATUS = {"include": "abstract_include", "unsure": "abstract_unsure"}
 
@@ -124,13 +125,16 @@ def apply_results(con, lines, batch, rng):
                 reasons.append("quote not found in record")
             if not row.get("exclusion_code"):
                 reasons.append("no exclusion code")
-            if rng.random() < SAMPLE_RATE:
+            if batch.get("audit", "rate") == "rate" and rng.random() < SAMPLE_RATE:
                 reasons.append("random audit sample")
         else:
             con.execute("UPDATE records SET status=?, decided_by=? WHERE record_id=?", (STATUS[d], who, rid))
             reasons = []
-        if row.get("injection_suspected"):
-            reasons.append("possible prompt injection")
+        passage = screen.injection_passage(f"{rec['title']} {rec['abstract'] or ''}")
+        if passage:
+            reasons.append(f"injection pattern in text: ...{passage}...")
+        elif row.get("injection_suspected"):
+            reasons.append("screener suspected injection; no known pattern found in text")
         if reasons:
             review.append({"record_id": rid, "screener_decision": d, "exclusion_code": row.get("exclusion_code") or "",
                            "reason": "; ".join(reasons), "title": rec["title"], "rationale": row.get("rationale", ""),
