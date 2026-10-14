@@ -2,7 +2,10 @@
   "msgbatch_01CvdpQ1hvopHSd7kMLAKq37": {
     "agree_exclude": 0,
     "disagree": 0,
-    "failed": 947
+    "failed": 947,
+    "errors": {
+      "ValueError: errored: {\"type\": \"error\", \"error\": {\"details\": null, \"type\": \"invalid_request_error\", \"message\": \"tool_choice: type \\\"tool\\\" and \\\"any\\\" are not supported for this model.\"}, \"request_id\":": 947
+    }
   },
   "status_counts": {
     "abstract_include": 300,
