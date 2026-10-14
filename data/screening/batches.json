@@ -109,6 +109,13 @@
   "model": "claude-sonnet-5-5",
   "prompt_version": "screener-0.4",
   "n": 947,
-  "state": "submitted"
+  "state": "submitted",
+  "counts": {
+   "processing": 947,
+   "succeeded": 0,
+   "errored": 0,
+   "canceled": 0,
+   "expired": 0
+  }
  }
 ]

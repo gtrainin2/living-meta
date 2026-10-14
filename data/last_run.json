@@ -1,4 +1,18 @@
 {
-  "submitted": 947,
-  "model": "claude-sonnet-5-5"
+  "msgbatch_018PvtwR5A3jPTfk2WzPCSS8": {
+    "status": "in_progress",
+    "counts": {
+      "processing": 947,
+      "succeeded": 0,
+      "errored": 0,
+      "canceled": 0,
+      "expired": 0
+    }
+  },
+  "status_counts": {
+    "abstract_include": 300,
+    "abstract_unsure": 1030,
+    "excluded": 13138,
+    "superseded": 89
+  }
 }
